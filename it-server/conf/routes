@@ -1,0 +1,4 @@
+
+GET        /assets/*file                      controllers.Assets.versioned(path = "/public", file)
+
+GET        /                                  controllers.QuestionController.ok
