@@ -3,8 +3,6 @@ package uk.gov.hmrc.viewmodels
 import play.api.libs.json._
 import play.twirl.api.Html
 
-import play.api.libs.functional.syntax._
-
 sealed trait Content
 
 object Content {
@@ -19,14 +17,20 @@ final case class HtmlContent(value: Html) extends Content
 
 object HtmlContent {
 
-  implicit lazy val writes: OWrites[HtmlContent] =
-    (__ \ "html").write[String].contramap { h: HtmlContent => h.value.toString }
+  lazy val writes: OWrites[HtmlContent] = OWrites {
+    content =>
+
+      Json.obj("html" -> content.value.toString)
+  }
 }
 
 final case class TextContent(value: String) extends Content
 
 object TextContent {
 
-  implicit lazy val writes: OWrites[TextContent] =
-    (__ \ "text").write[String].contramap { t: TextContent => t.value }
+  lazy val writes: OWrites[TextContent] = OWrites {
+    content =>
+
+      Json.obj("text" -> content.value)
+  }
 }

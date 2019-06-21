@@ -1,6 +1,6 @@
 package uk.gov.hmrc.viewmodels
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Json, OWrites}
 
 final case class Fieldset (
                             legend: Option[Legend] = None,
@@ -12,7 +12,7 @@ final case class Fieldset (
 
 object Fieldset {
 
-  implicit lazy val writes: Writes[Fieldset] = Writes {
+  implicit lazy val writes: OWrites[Fieldset] = OWrites {
     fieldset =>
 
       Json.obj(

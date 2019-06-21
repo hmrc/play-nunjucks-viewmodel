@@ -9,7 +9,7 @@ class LegendSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must serialise" - {
 
-      "when classes and `is page header` are supplied" in {
+      "when all optional values are supplied" in {
 
         val content = TextContent("foo")
         val classes = Some("bar")
@@ -24,7 +24,7 @@ class LegendSpec extends FreeSpec with MustMatchers with OptionValues {
         )
       }
 
-      "when classes and `is page header` are not supplied" in {
+      "when no optional values are supplied" in {
 
         val legend = Legend(TextContent("foo"))
 
