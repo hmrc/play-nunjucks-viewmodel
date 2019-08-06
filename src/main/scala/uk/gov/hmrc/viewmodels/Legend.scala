@@ -1,6 +1,5 @@
 package uk.gov.hmrc.viewmodels
 
-import play.api.libs.json.Json.JsValueWrapper
 import play.api.libs.json._
 
 final case class Legend (

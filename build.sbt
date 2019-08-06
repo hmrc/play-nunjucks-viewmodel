@@ -9,14 +9,14 @@ lazy val lib = (project in file("."))
   .settings(
     name := "play-nunjucks-viewmodel-spike",
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play" % PlayVersion.current % "test, provided",
-      "com.typesafe.play" %% "play-test" % PlayVersion.current % "test",
+      "com.typesafe.play" %% "play"            % PlayVersion.current % "test, provided",
+      "com.typesafe.play" %% "play-test"       % PlayVersion.current % "test",
       "com.typesafe.play" %% "filters-helpers" % PlayVersion.current % "test, provided",
-      "org.scalactic" %% "scalactic" % "3.0.7" % "test",
-      "org.scalatest" %% "scalatest" % "3.0.7" % "test",
-      "org.scalacheck" %% "scalacheck" % "1.14.0" % "test",
-      "org.scalamock" %% "scalamock" % "4.1.0" % "test",
-      "org.pegdown" % "pegdown" % "1.6.0" % "test"
+      "org.scalactic"     %% "scalactic"       % "3.0.7"             % "test",
+      "org.scalatest"     %% "scalatest"       % "3.0.7"             % "test",
+      "org.scalacheck"    %% "scalacheck"      % "1.14.0"            % "test",
+      "org.scalamock"     %% "scalamock"       % "4.1.0"             % "test",
+      "org.pegdown"       %  "pegdown"         % "1.6.0"             % "test"
     )
   )
 
@@ -34,14 +34,20 @@ lazy val itServer = (project in file("it-server"))
     name := "it-server",
     libraryDependencies ++= Seq(
       filters,
-      "org.scalactic" %% "scalactic" % "3.0.7" % "test",
-      "org.scalatest" %% "scalatest" % "3.0.7" % "test",
-      "org.scalacheck" %% "scalacheck" % "1.14.0" % "test",
-      "org.pegdown" % "pegdown" % "1.6.0" % "test",
-      "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1" % "test",
-      "com.typesafe.play" %% "play-guice" % PlayVersion.current
+      "org.scalactic"          %% "scalactic"           % "3.0.7"             % "test",
+      "org.scalatest"          %% "scalatest"           % "3.0.7"             % "test",
+      "org.scalacheck"         %% "scalacheck"          % "1.14.0"            % "test",
+      "org.pegdown"            % "pegdown"              % "1.6.0"             % "test",
+      "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
+      "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
+      "uk.gov.hmrc"            %% "play-nunjucks-spike" % "0.8.0-play-26",
+      "org.webjars.npm"        %  "govuk-frontend"      % "2.11.0"
     ),
-    pipelineStages in Assets := Seq(concat, uglify)
+    Concat.groups := Seq(
+      "javascripts/application.js" -> group(Seq("lib/govuk-frontend/all.js"))
+    ),
+    uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
+    pipelineStages in Assets := Seq(concat,uglify)
   )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(

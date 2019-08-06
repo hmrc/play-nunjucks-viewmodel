@@ -1,0 +1,46 @@
+{% extends "includes/layout.njk" %}
+
+{% from "govuk-frontend/components/back-link/macro.njk"     import govukBackLink %}
+{% from "govuk-frontend/components/checkboxes/macro.njk"    import govukCheckboxes %}
+{% from "govuk-frontend/components/button/macro.njk"        import govukButton %}
+{% from "govuk-frontend/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block pageTitle %}
+
+    {% set titlePrefix = messages("error.title.prefix") if errorSummary else "" %}
+
+    {{ titlePrefix + ' ' + messages("location.title") }}
+
+{% endblock %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: messages("site.back")
+  }) }}
+
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {% if errorSummary %}
+          {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
+
+        <form action="{{ routes.controllers.SingleComponentController.submitLocation().url }}" method="post">
+
+          {{ csrf() | safe }}
+
+          {{ govukCheckboxes(checkboxes) }}
+
+          {{ govukButton({
+            text: messages("site.continue")
+          }) }}
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
