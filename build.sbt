@@ -41,10 +41,10 @@ lazy val itServer = (project in file("it-server"))
       "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
       "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
       "uk.gov.hmrc"            %% "play-nunjucks-spike" % "0.8.0-play-26",
-      "org.webjars.npm"        %  "govuk-frontend"      % "2.11.0"
+      "org.webjars.npm"        %  "govuk-frontend"      % "3.1.0"
     ),
     Concat.groups := Seq(
-      "javascripts/application.js" -> group(Seq("lib/govuk-frontend/all.js"))
+      "javascripts/application.js" -> group(Seq("lib/govuk-frontend/govuk/all.js"))
     ),
     uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
     pipelineStages in Assets := Seq(concat,uglify)
