@@ -40,3 +40,13 @@ dateOfBirth.error.required.one = Your date of birth must include {0}
 
 livesInUK.title = Do you live in the UK?
 livesInUK.heading = Do you live in the UK?
+
+checkboxes.title = Checkboxes
+checkboxes.a = First
+checkboxes.b = Second
+checkboxes.c = Third
+
+booleanProduct.title = Boolean product
+booleanProduct.a = First
+booleanProduct.b = Second
+booleanProduct.c = Third

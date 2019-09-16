@@ -1,16 +1,7 @@
 
 GET        /assets/*file                      controllers.Assets.versioned(path = "/public", file)
 
-GET        /                                  controllers.QuestionController.ok
-
-GET        /location                          controllers.SingleComponentController.getLocation
-POST       /location                          controllers.SingleComponentController.submitLocation
-
-GET        /name                              controllers.SingleComponentController.getName
-POST       /name                              controllers.SingleComponentController.submitName
-
-GET        /dateOfBirth                       controllers.SingleComponentController.getDateOfBirth
-POST       /dateOfBirth                       controllers.SingleComponentController.submitDateOfBirth
-
-GET        /livesInUK                         controllers.SingleComponentController.getLivesInUK
-POST       /livesInUK                         controllers.SingleComponentController.submitLivesInUK
+GET        /checkboxes                        controllers.CheckboxesController.get
+POST       /checkboxes                        controllers.CheckboxesController.post
+GET        /booleanProduct                    controllers.BooleanProductController.get
+POST       /booleanProduct                    controllers.BooleanProductController.post
