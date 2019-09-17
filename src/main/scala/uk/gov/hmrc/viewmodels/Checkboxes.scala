@@ -28,11 +28,11 @@ object Checkboxes {
         )
     }
 
-    val tail = items.tail.zipWithIndex.map {
+    val tail = items.zipWithIndex.tail.map {
       case (item, i) =>
         Item(
-          name    = s"${field.name}[${i + 1}]",
-          id      = s"${field.id}_${i + 1}",
+          name    = s"${field.name}[$i]",
+          id      = s"${field.id}_$i",
           text    = item.label,
           value   = item.value,
           checked = field.values.contains(item.value)

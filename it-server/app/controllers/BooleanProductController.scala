@@ -50,7 +50,7 @@ class BooleanProductController @Inject()(
   def get: Action[AnyContent] = Action.async {
     implicit request =>
 
-      val existingValue = getFromSession[BooleanProductAnswer]("checkboxes")
+      val existingValue = getFromSession[BooleanProductAnswer]("booleanProduct")
       val form = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
 
       renderer.render("booleanProduct.njk", Json.obj(
@@ -71,7 +71,7 @@ class BooleanProductController @Inject()(
         value =>
           Future.successful {
             Redirect(controllers.routes.BooleanProductController.get())
-              .addingToSession("checkboxes" -> Json.stringify(Json.toJson(value)))
+              .addingToSession("booleanProduct" -> Json.stringify(Json.toJson(value)))
           }
       )
   }

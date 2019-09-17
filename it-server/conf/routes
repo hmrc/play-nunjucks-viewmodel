@@ -3,5 +3,12 @@ GET        /assets/*file                      controllers.Assets.versioned(path 
 
 GET        /checkboxes                        controllers.CheckboxesController.get
 POST       /checkboxes                        controllers.CheckboxesController.post
+
 GET        /booleanProduct                    controllers.BooleanProductController.get
 POST       /booleanProduct                    controllers.BooleanProductController.post
+
+GET        /radios                            controllers.RadiosController.get
+POST       /radios                            controllers.RadiosController.post
+
+GET        /yesNo                             controllers.YesNoController.get
+POST       /yesNo                             controllers.YesNoController.post
