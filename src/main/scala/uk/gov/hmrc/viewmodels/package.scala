@@ -1,8 +1,9 @@
 package uk.gov.hmrc
 
-import play.api.data.{Field, Form, Mapping}
+import play.api.data.{Field, Form, FormError, Mapping}
 import play.api.i18n.Messages
-import play.api.libs.json.{JsArray, JsNull, JsObject, JsValue, Json, OWrites}
+import play.api.libs.json._
+import uk.gov.hmrc.mappings.LocalDateMapping
 
 package object viewmodels {
 
@@ -29,26 +30,33 @@ package object viewmodels {
         }.foldLeft(Json.obj()) {
           (obj, field) =>
 
-            val error = field.error.map {
+            val path = field.name.split("\\.")
+              .foldLeft[JsPath](JsPath)(_ \ _)
+
+            val error = field.errors.headOption.map {
               error =>
                 Json.obj(
                   "error" ->
-                    Json.obj("text" -> messages(error.message, error.args: _*))
+                    Json.obj("text" -> Message.Computed(error.message, error.args: _*))
                 )
             }.getOrElse(Json.obj())
 
-            obj ++ Json.obj(
-              field.name ->
-                (Json.obj(
-                  "value" -> field.value,
-                  "values" -> field.values
-                ) ++ error)
-            )
+            obj.validate {
+              __.json.update {
+                path.json.put {
+                  Json.obj(
+                    "value"  -> field.value,
+                    "values" -> field.values
+                  ) ++ error
+                }
+              }
+              // Can this fail?
+            }.get
         } ++ Json.obj(
           "errors" -> form.errors.map {
             error =>
               Json.obj(
-                "text" -> messages(error.message, error.args: _*),
+                "text" -> Message.Computed(error.message, error.args: _*),
                 "href" -> ("#" + form(error.key).id)
               )
           }
