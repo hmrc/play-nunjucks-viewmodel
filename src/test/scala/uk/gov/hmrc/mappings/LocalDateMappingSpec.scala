@@ -2,9 +2,9 @@ package uk.gov.hmrc.mappings
 
 import java.time.LocalDate
 
+import uk.gov.hmrc.viewmodels._
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import play.api.data.{Form, FormError}
-import uk.gov.hmrc.viewmodels.Message
 
 class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues {
 
@@ -63,7 +63,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
           "date.year"  -> "2001"
         ))
 
-        result.errors must contain only (FormError("date", Seq("date.required.1"), Seq(Message.Computed("site.day"))))
+        result.errors must contain only (FormError("date", Seq("date.required.1"), Seq(msg"site.day")))
       }
 
       "month field" in {
@@ -73,7 +73,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
           "date.year"  -> "2001"
         ))
 
-        result.errors must contain only (FormError("date.month", Seq("date.required.1"), Seq(Message.Computed("site.month"))))
+        result.errors must contain only (FormError("date.month", Seq("date.required.1"), Seq(msg"site.month")))
       }
 
       "year field" in {
@@ -83,7 +83,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
           "date.month" -> "2"
         ))
 
-        result.errors must contain only (FormError("date.year", Seq("date.required.1"), Seq(Message.Computed("site.year"))))
+        result.errors must contain only (FormError("date.year", Seq("date.required.1"), Seq(msg"site.year")))
       }
     }
 
@@ -95,7 +95,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
           "date.year" -> "2001"
         ))
 
-        result.errors must contain only (FormError("date", Seq("date.required.2"), Seq(Message.Computed("site.day"), Message.Computed("site.month"))))
+        result.errors must contain only (FormError("date", Seq("date.required.2"), Seq(msg"site.day", msg"site.month")))
       }
 
       "day and year fields" in {
@@ -104,7 +104,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
           "date.month" -> "1"
         ))
 
-        result.errors must contain only (FormError("date", Seq("date.required.2"), Seq(Message.Computed("site.day"), Message.Computed("site.year"))))
+        result.errors must contain only (FormError("date", Seq("date.required.2"), Seq(msg"site.day", msg"site.year")))
       }
 
       "month and year fields" in {
@@ -113,7 +113,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
           "date.day" -> "1"
         ))
 
-        result.errors must contain only (FormError("date.month", Seq("date.required.2"), Seq(Message.Computed("site.month"), Message.Computed("site.year"))))
+        result.errors must contain only (FormError("date.month", Seq("date.required.2"), Seq(msg"site.month", msg"site.year")))
       }
     }
 

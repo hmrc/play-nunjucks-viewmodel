@@ -15,3 +15,5 @@ POST       /yesNo                             controllers.YesNoController.post
 
 GET        /date                              controllers.DateController.get
 POST       /date                              controllers.DateController.post
+
+GET        /summaryList                       controllers.SummaryListController.get

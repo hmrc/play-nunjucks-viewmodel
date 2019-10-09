@@ -6,8 +6,8 @@ import play.api.libs.json.{Json, OWrites}
 
 object DateInput {
 
-  final case class ViewModel(items: Seq[Item], error: Option[Message])
-  final case class Item(label: Message, name: String, id: String, value: String, classes: String)
+  final case class ViewModel(items: Seq[Item], error: Option[Text])
+  final case class Item(label: Text, name: String, id: String, value: String, classes: String)
 
   object ViewModel {
     implicit def writes(implicit messages: Messages): OWrites[ViewModel] =
@@ -32,7 +32,7 @@ object DateInput {
   def localDate(field: Field): ViewModel = {
 
     val error = (field.error orElse field("day").error orElse field("month").error orElse field("year").error)
-      .map(formError => Message.Computed(formError.message, formError.args: _*))
+      .map(formError => Text.Message(formError.message, formError.args: _*))
 
     def classes(classes: String*): String = {
       val allClasses = if (error.isDefined) "govuk-input--error" :: classes.toList else classes.toList
@@ -41,21 +41,21 @@ object DateInput {
 
     val items = Seq(
       Item(
-        label = Message.Computed("site.day.capitalized"),
+        label = Text.Message("site.day.capitalized"),
         name = field("day").name,
         id = field.id,
         value = field("day").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label = Message.Computed("site.month.capitalized"),
+        label = Text.Message("site.month.capitalized"),
         name = field("month").name,
         id = field("month").id,
         value = field("month").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label = Message.Computed("site.year.capitalized"),
+        label = Text.Message("site.year.capitalized"),
         name = field("year").name,
         id = field("year").id,
         value = field("year").value.getOrElse(""),

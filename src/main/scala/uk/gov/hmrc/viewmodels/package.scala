@@ -6,6 +6,15 @@ import play.api.libs.json._
 
 package object viewmodels {
 
+  implicit class MessageInterpolators(sc: StringContext) {
+
+    def msg(args: Any*): Text.Message =
+      Text.Message(sc.s(args: _*))
+
+    def lit(args: Any*): Text.Literal =
+      Text.Literal(sc.s(args: _*))
+  }
+
   implicit class RichField(field: Field) {
 
     def values: Seq[String] = {
@@ -48,7 +57,7 @@ package object viewmodels {
               error =>
                 Json.obj(
                   "error" ->
-                    Json.obj("text" -> Message.Computed(error.message, error.args: _*))
+                    Json.obj("text" -> Text.Message(error.message, error.args: _*))
                 )
             }.getOrElse(Json.obj())
 
@@ -67,7 +76,7 @@ package object viewmodels {
           "errors" -> form.errors.map {
             error =>
               Json.obj(
-                "text" -> Message.Computed(error.message, error.args: _*),
+                "text" -> Text.Message(error.message, error.args: _*),
                 "href" -> ("#" + form(error.key).id)
               )
           }

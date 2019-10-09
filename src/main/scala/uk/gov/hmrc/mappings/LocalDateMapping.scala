@@ -6,7 +6,7 @@ import cats.implicits._
 import play.api.data.format.Formatter
 import play.api.data.validation.Constraint
 import play.api.data.{FormError, Forms, Mapping}
-import uk.gov.hmrc.viewmodels.Message
+import uk.gov.hmrc.viewmodels.Text
 
 import scala.util.control.Exception.nonFatalCatch
 import scala.util.{Failure, Success, Try}
@@ -63,9 +63,9 @@ class LocalDateMapping(
 
     val requiredFields = fields.count(_._2.isDefined) match {
       case 2 =>
-        Left(List(FormError(missingFields.head.name(key), "date.required.1", missingFields.map(f => Message.Computed(f.messageKey)))))
+        Left(List(FormError(missingFields.head.name(key), "date.required.1", missingFields.map(f => Text.Message(f.messageKey)))))
       case 1 =>
-        Left(List(FormError(missingFields.head.name(key), "date.required.2", missingFields.map(f => Message.Computed(f.messageKey)))))
+        Left(List(FormError(missingFields.head.name(key), "date.required.2", missingFields.map(f => Text.Message(f.messageKey)))))
       case 0 =>
         Left(List(FormError(key, "date.required")))
       case _ =>
