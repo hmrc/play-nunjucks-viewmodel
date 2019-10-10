@@ -62,9 +62,9 @@ class RadiosController @Inject()(
 
     val field = form("value")
     val items = Seq(
-      Radios.Radio(Messages("radios.a"), "A"),
-      Radios.Radio(Messages("radios.b"), "B"),
-      Radios.Radio(Messages("radios.c"), "C")
+      Radios.Radio(msg"radios.a", "A"),
+      Radios.Radio(msg"radios.b", "B"),
+      Radios.Radio(msg"radios.c", "C")
     )
 
     Radios(field, items)

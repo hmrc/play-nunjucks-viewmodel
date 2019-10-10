@@ -6,7 +6,6 @@ import play.api.libs.functional.syntax._
 
 sealed trait Content
 
-//  final case class Text(value: Info) extends Content
 sealed trait Text extends Content {
   def resolve(implicit messages: Messages): String
 }
