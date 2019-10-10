@@ -2,12 +2,12 @@ package uk.gov.hmrc.viewmodels
 
 import play.api.data.Field
 import play.api.i18n.Messages
-import play.api.libs.json.{Json, OFormat, OWrites}
+import play.api.libs.json.{Json, OWrites}
 
 object Radios {
 
-  final case class Radio(label: String, value: String)
-  final case class Item(id: String, text: String, value: String, checked: Boolean)
+  final case class Radio(label: Text, value: String)
+  final case class Item(id: String, text: Text, value: String, checked: Boolean)
 
   object Item {
     implicit lazy val writes: OWrites[Item] =
@@ -40,7 +40,7 @@ object Radios {
   }
 
   def yesNo(field: Field)(implicit messages: Messages): Seq[Item] = Seq(
-    Item(id = field.id, text = Messages("site.yes"), value = "true", checked = field.value.contains("true")),
-    Item(id = field.id, text = Messages("site.no"), value = "false", checked = field.value.contains("false"))
+    Item(id = field.id, text = msg"site.yes", value = "true", checked = field.value.contains("true")),
+    Item(id = field.id, text = msg"site.no", value = "false", checked = field.value.contains("false"))
   )
 }

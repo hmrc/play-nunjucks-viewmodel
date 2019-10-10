@@ -39,9 +39,9 @@ class BooleanProductController @Inject()(
 
     val field = form("value")
     val items = Seq(
-      Checkboxes.BooleanProduct(Messages("booleanProduct.a"), "a"),
-      Checkboxes.BooleanProduct(Messages("booleanProduct.b"), "b"),
-      Checkboxes.BooleanProduct(Messages("booleanProduct.c"), "c")
+      Checkboxes.BooleanProduct(msg"booleanProduct.a", "a"),
+      Checkboxes.BooleanProduct(msg"booleanProduct.b", "b"),
+      Checkboxes.BooleanProduct(msg"booleanProduct.c", "c")
     )
 
     Checkboxes.booleanProduct(field, items)

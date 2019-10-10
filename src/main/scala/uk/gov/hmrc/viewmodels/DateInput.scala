@@ -41,21 +41,21 @@ object DateInput {
 
     val items = Seq(
       Item(
-        label = Text.Message("site.day.capitalized"),
+        label = msg"site.day.capitalized",
         name = field("day").name,
         id = field.id,
         value = field("day").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label = Text.Message("site.month.capitalized"),
+        label = msg"site.month.capitalized",
         name = field("month").name,
         id = field("month").id,
         value = field("month").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label = Text.Message("site.year.capitalized"),
+        label = msg"site.year.capitalized",
         name = field("year").name,
         id = field("year").id,
         value = field("year").value.getOrElse(""),

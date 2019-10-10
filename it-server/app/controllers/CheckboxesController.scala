@@ -57,9 +57,9 @@ class CheckboxesController @Inject()(
 
     val field = form("value")
     val items = Seq(
-      Checkboxes.Checkbox(Messages("checkboxes.a"), "A"),
-      Checkboxes.Checkbox(Messages("checkboxes.b"), "B"),
-      Checkboxes.Checkbox(Messages("checkboxes.c"), "C")
+      Checkboxes.Checkbox(msg"checkboxes.a", "A"),
+      Checkboxes.Checkbox(msg"checkboxes.b", "B"),
+      Checkboxes.Checkbox(msg"checkboxes.c", "C")
     )
 
     Checkboxes.set(field, items)

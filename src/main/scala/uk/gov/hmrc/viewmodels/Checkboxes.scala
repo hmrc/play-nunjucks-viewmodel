@@ -5,10 +5,10 @@ import play.api.libs.json.{Json, OWrites}
 
 object Checkboxes {
 
-  final case class BooleanProduct(label: String, name: String)
-  final case class Checkbox(label: String, value: String)
+  final case class BooleanProduct(label: Content, name: String)
+  final case class Checkbox(label: Content, value: String)
 
-  final case class Item(name: String, id: String, text: String, value: String, checked: Boolean)
+  final case class Item(name: String, id: String, content: Content, value: String, checked: Boolean)
 
   object Item {
     implicit lazy val writes: OWrites[Item] =
@@ -22,7 +22,7 @@ object Checkboxes {
         Item(
           name    = s"${field.name}[0]",
           id      = field.id,
-          text    = item.label,
+          content = item.label,
           value   = item.value,
           checked = field.values.contains(item.value)
         )
@@ -33,7 +33,7 @@ object Checkboxes {
         Item(
           name    = s"${field.name}[$i]",
           id      = s"${field.id}_$i",
-          text    = item.label,
+          content    = item.label,
           value   = item.value,
           checked = field.values.contains(item.value)
         )
@@ -49,7 +49,7 @@ object Checkboxes {
         Item(
           name = field(item.name).name,
           id      = field.id,
-          text    = item.label,
+          content    = item.label,
           value   = "true",
           checked = field(item.name).value.contains("true")
         )
@@ -60,7 +60,7 @@ object Checkboxes {
         Item(
           name    = field(item.name).name,
           id      = field(item.name).id,
-          text    = item.label,
+          content    = item.label,
           value   = "true",
           checked = field(item.name).value.contains("true")
         )
