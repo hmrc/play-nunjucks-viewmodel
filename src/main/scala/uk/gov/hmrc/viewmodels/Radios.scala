@@ -2,7 +2,8 @@ package uk.gov.hmrc.viewmodels
 
 import play.api.data.Field
 import play.api.i18n.Messages
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 object Radios {
 
@@ -10,7 +11,7 @@ object Radios {
   final case class Item(id: String, text: Text, value: String, checked: Boolean)
 
   object Item {
-    implicit lazy val writes: OWrites[Item] =
+    implicit def writes(implicit messages: Messages): OWrites[Item] =
       Json.writes[Item]
   }
 
