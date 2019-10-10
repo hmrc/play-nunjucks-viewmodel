@@ -7,7 +7,7 @@
 
 {% block pageTitle %}
   {% set titlePrefix = messages("error.title.prefix") if errorSummary else "" %}
-  {{ titlePrefix + ' ' + messages("location.title") }}
+  {{ titlePrefix + ' ' + messages("checkboxes.title") }}
 {% endblock %}
 
 {% block content %}
@@ -20,15 +20,29 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
 
-        {% if errorSummary %}
-          {{ govukErrorSummary(errorSummary) }}
+        {% if form.errors.length > 0 %}
+          {{ govukErrorSummary({
+            "titleText": messages("site.error-summary"),
+            "errorList": form.errors
+          }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.SingleComponentController.submitLocation().url }}" method="post">
+        <form action="{{ routes.controllers.CheckboxesController.post().url }}" method="post">
 
           {{ csrf() | safe }}
 
-          {{ govukCheckboxes(checkboxes) }}
+          {{ govukCheckboxes({
+            name: 'value',
+            fieldset: {
+              legend: {
+                text: messages('checkboxes.title'),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            items: checkboxes,
+            errorMessage: form.value.error
+          }) }}
 
           {{ govukButton({
             text: messages("site.continue")

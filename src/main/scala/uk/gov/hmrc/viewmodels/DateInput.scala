@@ -4,56 +4,65 @@ import play.api.data.Field
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OWrites}
 
-final case class DateInput (
-                             items: Seq[DatePart],
-                             id: Option[String],
-                             namePrefix: Option[String],
-                             hint: Option[Hint],
-                             errorMessage: Option[ErrorMessage],
-                             formGroupClasses: Option[String],
-                             fieldset: Option[Fieldset],
-                             classes: Option[String],
-                             attributes: Map[String, String]
-                           )
 object DateInput {
 
-  def apply(
-             field: Field,
-             id: Option[String] = None,
-             namePrefix: Option[String] = None,
-             hint: Option[Hint] = None,
-             formGroupClasses: Option[String] = None,
-             fieldset: Option[Fieldset] = None,
-             classes: Option[String] = None,
-             attributes: Map[String, String] = Map.empty
-           )(implicit messages: Messages): DateInput = {
+  final case class ViewModel(items: Seq[Item], error: Option[Text])
+  final case class Item(label: Text, name: String, id: String, value: String, classes: String)
 
-    val errorMessage = field.error.map {
-      err =>
-        ErrorMessage(TextContent(err.format))
-    }
-
-    val dayField = DatePart(field("day"), classes = Some("govuk-input--width-2"), label = Some(messages("site.day")))
-    val monthField = DatePart(field("month"), classes = Some("govuk-input--width-2"), label = Some(messages("site.month")))
-    val yearField = DatePart(field("year"), classes = Some("govuk-input--width-4"), label = Some(messages("site.year")))
-    val fields = Seq(dayField, monthField, yearField)
-
-    DateInput(fields, id, namePrefix, hint, errorMessage, formGroupClasses, fieldset, classes, attributes)
+  object ViewModel {
+    implicit def writes(implicit messages: Messages): OWrites[ViewModel] =
+      OWrites {
+        viewmodel =>
+          Json.obj(
+            "items" -> viewmodel.items,
+            "error" -> viewmodel.error.map {
+              error =>
+                Json.obj(
+                  "text" -> error
+                )
+            }
+          )
+      }
   }
 
-  implicit lazy val writes: OWrites[DateInput] = OWrites {
-    date =>
+  object Item {
+    implicit def writes(implicit messages: Messages): OWrites[Item] = Json.writes[Item]
+  }
 
-      Json.obj(
-        "items"        -> date.items,
-        "id"           -> date.id,
-        "namePrefix"   -> date.namePrefix,
-        "hint"         -> date.hint,
-        "errorMessage" -> date.errorMessage,
-        "formGroup"    -> Json.obj("classes" -> date.formGroupClasses).filterNulls,
-        "fieldset"     -> date.fieldset,
-        "classes"      -> date.classes,
-        "attributes"   -> date.attributes
-      ).filterNulls
+  def localDate(field: Field): ViewModel = {
+
+    val error = (field.error orElse field("day").error orElse field("month").error orElse field("year").error)
+      .map(formError => Text.Message(formError.message, formError.args: _*))
+
+    def classes(classes: String*): String = {
+      val allClasses = if (error.isDefined) "govuk-input--error" :: classes.toList else classes.toList
+      allClasses.mkString(" ")
+    }
+
+    val items = Seq(
+      Item(
+        label = msg"site.day.capitalized",
+        name = field("day").name,
+        id = field.id,
+        value = field("day").value.getOrElse(""),
+        classes = classes("govuk-input--width-2")
+      ),
+      Item(
+        label = msg"site.month.capitalized",
+        name = field("month").name,
+        id = field("month").id,
+        value = field("month").value.getOrElse(""),
+        classes = classes("govuk-input--width-2")
+      ),
+      Item(
+        label = msg"site.year.capitalized",
+        name = field("year").name,
+        id = field("year").id,
+        value = field("year").value.getOrElse(""),
+        classes = classes("govuk-input--width-4")
+      )
+    )
+
+    ViewModel(items, error)
   }
 }

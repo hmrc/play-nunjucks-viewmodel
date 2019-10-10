@@ -1,10 +1,16 @@
 site.error-summary = There is a problem
 site.back = Back
 site.continue = Continue
+site.edit = Change
+site.edit.hidden = your answer to {0}
 
-site.day = Day
-site.month = Month
-site.year = Year
+site.day = day
+site.month = month
+site.year = year
+site.day.capitalized = Day
+site.month.capitalized = Month
+site.year.capitalized = Year
+site.na = N/A
 
 site.yes = Yes
 site.no = No
@@ -12,31 +18,28 @@ site.no = No
 error.summary.title = There is a problem
 error.title.prefix = Error:
 
-questionPage.heading = What is your home postcode?
-questionPage.required = Enter your home postcode
+checkboxes.title = Checkboxes
+checkboxes.a = First
+checkboxes.b = Second
+checkboxes.c = Third
 
-# Test messages
-test.foo = foobar
-test.hello = Hello, {0}!
+booleanProduct.title = Boolean product
+booleanProduct.a = First
+booleanProduct.b = Second
+booleanProduct.c = Third
 
-location.title = Where do you live?
-location.heading = Where do you live?
-location.england = England
-location.scotland = Scotland
-location.wales = Wales
-location.northernIreland = Northern Ireland
+radios.title = Radios
+radios.a = First
+radios.b = Second
+radios.c = Third
 
-name.title = What is your name?
-name.heading = What is your name?
-name.hint = Some example hint text
+yesNo.title = Yes or no
 
-dateOfBirth.title = What is your date of birth?
-dateOfBirth.heading = What is your date of birth?
-dateOfBirth.hint = For example, 12 3 1990
-dateOfBirth.error.invalid = Enter a real date
-dateOfBirth.error.required.all = Enter your date of birth
-dateOfBirth.error.required.two = Your date of birth must include {0} and {1}
-dateOfBirth.error.required.one = Your date of birth must include {0}
+date.title = Date
+date.hint = For example, 12 11 2007
+date.invalid = Enter a real date
+date.required = Enter a date
+date.required.1 = A date must include a {0}
+date.required.2 = A date must include a {0} and {1}
 
-livesInUK.title = Do you live in the UK?
-livesInUK.heading = Do you live in the UK?
+summaryList.title = Summary list

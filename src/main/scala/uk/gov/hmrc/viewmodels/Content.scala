@@ -1,36 +1,65 @@
 package uk.gov.hmrc.viewmodels
 
-import play.api.libs.json._
-import play.twirl.api.Html
+import play.api.i18n.Messages
+import play.api.libs.json.Writes
+import play.api.libs.functional.syntax._
 
 sealed trait Content
 
-object Content {
-
-  implicit lazy val writes: OWrites[Content] = OWrites {
-    case t: TextContent => Json.toJsObject(t)(TextContent.writes)
-    case h: HtmlContent => Json.toJsObject(h)(HtmlContent.writes)
-  }
+//  final case class Text(value: Info) extends Content
+sealed trait Text extends Content {
+  def resolve(implicit messages: Messages): String
 }
 
-final case class HtmlContent(value: Html) extends Content
+object Text {
 
-object HtmlContent {
+  final case class Message(key: String, args: Any*) extends Text {
 
-  lazy val writes: OWrites[HtmlContent] = OWrites {
-    content =>
+    override def resolve(implicit messages: Messages): String = {
 
-      Json.obj("html" -> content.value.toString)
+      val resolvedArgs = args.map {
+        case message: Text => message.resolve
+        case other         => other
+      }
+
+      Messages(key, resolvedArgs: _*)
+    }
+
+    def withArgs(args: Any*): Message =
+      Message(key, args: _*)
   }
+
+  final case class Literal(value: String) extends Text {
+    override def resolve(implicit messages: Messages): String =
+      value
+  }
+
+  implicit def writes(implicit messages: Messages): Writes[Text] =
+    Writes.of[String].contramap[Text](_.resolve)
 }
 
-final case class TextContent(value: String) extends Content
+final case class Html(value: play.twirl.api.Html) extends Content
 
-object TextContent {
+object Html {
 
-  lazy val writes: OWrites[TextContent] = OWrites {
-    content =>
+  def apply(content: String): Html =
+    new Html(play.twirl.api.Html(content))
 
-      Json.obj("text" -> content.value)
+  implicit lazy val writes: Writes[Html] =
+    Writes.of[String].contramap[Html](_.value.toString)
+}
+
+trait WithContent {
+
+  def content: Content
+
+  def text: Option[Text] = content match {
+    case c: Text => Some(c)
+    case _       => None
+  }
+
+  def html: Option[Html] = content match {
+    case c: Html => Some(c)
+    case _       => None
   }
 }

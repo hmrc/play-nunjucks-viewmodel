@@ -4,85 +4,43 @@ import play.api.data.Field
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OWrites}
 
-final case class Radios (
-                          name: String,
-                          items: Seq[RadioItem],
-                          fieldset: Option[Fieldset],
-                          hint: Option[Hint],
-                          errorMessage: Option[ErrorMessage],
-                          formGroupClasses: Option[String],
-                          idPrefix: Option[String],
-                          classes: Option[String],
-                          attributes: Map[String, String]
-                        ) {
-
-  require(items.nonEmpty, "items cannot be empty")
-}
-
 object Radios {
 
-  def apply(
-             field: Field,
-             items: Seq[RadioItem],
-             fieldset: Option[Fieldset] = None,
-             hint: Option[Hint] = None,
-             formGroupClasses: Option[String] = None,
-             idPrefix: Option[String] = None,
-             classes: Option[String] = None,
-             attributes: Map[String, String] = Map.empty
-           )(implicit messages: Messages): Radios = {
+  final case class Radio(label: Text, value: String)
+  final case class Item(id: String, text: Text, value: String, checked: Boolean)
 
-    val errorMessage = field.error.map {
-      err =>
-        ErrorMessage(TextContent(err.format))
+  object Item {
+    implicit lazy val writes: OWrites[Item] =
+      Json.writes[Item]
+  }
+
+  def apply(field: Field, items: Seq[Radio]): Seq[Item] = {
+
+    val head = items.headOption.map {
+      item =>
+        Item(
+          id      = field.id,
+          text    = item.label,
+          value   = item.value,
+          checked = field.values.contains(item.value)
+        )
     }
 
-    Radios(field.name, items, fieldset, hint, errorMessage, formGroupClasses, idPrefix, classes, attributes)
+    val tail = items.zipWithIndex.tail.map {
+      case (item, i) =>
+        Item(
+          id      = s"${field.id}_$i",
+          text    = item.label,
+          value   = item.value,
+          checked = field.values.contains(item.value)
+        )
+    }
+
+    head.toSeq ++ tail
   }
 
-  def yesOrNo(
-               field: Field,
-               fieldset: Option[Fieldset] = None,
-               hint: Option[Hint] = None,
-               formGroupClasses: Option[String] = None,
-               idPrefix: Option[String] = None,
-               classes: Option[String] = None,
-               attributes: Map[String, String] = Map.empty
-             )(implicit messages: Messages): Radios = {
-
-
-    val yes = RadioItemInput(
-      field   = field,
-      content = TextContent(messages("site.yes")),
-      value   = "true"
-    )
-
-    val no = RadioItemInput(
-      field   = field,
-      content = TextContent(messages("site.no")),
-      value   = "false"
-    )
-
-    val items = Seq(yes, no)
-
-    val allClasses = Some(("govuk-radios--inline " + classes.getOrElse("")).trim)
-
-    Radios(field, items, fieldset, hint, formGroupClasses, idPrefix, allClasses, attributes)
-  }
-
-  implicit def writes(implicit messages: Messages): OWrites[Radios] = OWrites {
-    radios =>
-
-      Json.obj(
-        "name"             -> radios.name,
-        "items"            -> radios.items,
-        "fieldset"         -> radios.fieldset,
-        "hint"             -> radios.hint,
-        "formGroup"        -> Json.obj("classes" -> radios.formGroupClasses).filterNulls,
-        "idPrefix"         -> radios.idPrefix,
-        "classes"          -> radios.classes,
-        "attributes"       -> radios.attributes,
-        "errorMessage"     -> radios.errorMessage
-      ).filterNulls
-  }
+  def yesNo(field: Field)(implicit messages: Messages): Seq[Item] = Seq(
+    Item(id = field.id, text = msg"site.yes", value = "true", checked = field.value.contains("true")),
+    Item(id = field.id, text = msg"site.no", value = "false", checked = field.value.contains("false"))
+  )
 }

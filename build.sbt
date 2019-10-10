@@ -8,7 +8,9 @@ lazy val lib = (project in file("."))
   .settings(commonSettings: _*)
   .settings(
     name := "play-nunjucks-viewmodel-spike",
+    scalacOptions += "-Ypartial-unification",
     libraryDependencies ++= Seq(
+      "org.typelevel"     %% "cats-core"       % "1.6.1",
       "com.typesafe.play" %% "play"            % PlayVersion.current % "test, provided",
       "com.typesafe.play" %% "play-test"       % PlayVersion.current % "test",
       "com.typesafe.play" %% "filters-helpers" % PlayVersion.current % "test, provided",
