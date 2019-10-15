@@ -45,21 +45,24 @@ object DateInput {
         name = field("day").name,
         id = field.id,
         value = field("day").value.getOrElse(""),
-        classes = classes("govuk-input--width-2")
+        classes = classes("govuk-input--width-2"),
+        type = "tel"
       ),
       Item(
         label = msg"site.month.capitalized",
         name = field("month").name,
         id = field("month").id,
         value = field("month").value.getOrElse(""),
-        classes = classes("govuk-input--width-2")
+        classes = classes("govuk-input--width-2"),
+        type = "tel"
       ),
       Item(
         label = msg"site.year.capitalized",
         name = field("year").name,
         id = field("year").id,
         value = field("year").value.getOrElse(""),
-        classes = classes("govuk-input--width-4")
+        classes = classes("govuk-input--width-4"),
+        type = "tel"
       )
     )
 
