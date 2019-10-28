@@ -77,6 +77,7 @@ lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
     Resolver.bintrayRepo("hmrc", "snapshots"),
     Resolver.bintrayRepo("hmrc", "release-candidates"),
     Resolver.typesafeRepo("releases"),
-    Resolver.jcenterRepo
+    Resolver.jcenterRepo,
+    "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases"
   )
 )
