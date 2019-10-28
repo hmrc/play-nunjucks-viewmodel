@@ -42,8 +42,8 @@ lazy val itServer = (project in file("it-server"))
       "org.pegdown"            % "pegdown"              % "1.6.0"             % "test",
       "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
       "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
-      "uk.gov.hmrc"            %% "play-nunjucks-spike" % "0.8.0-play-26",
-      "org.webjars.npm"        %  "govuk-frontend"      % "3.1.0"
+      "uk.gov.hmrc"            %% "play-nunjucks-spike" % "0.13.0-play-26",
+      "org.webjars.npm"        %  "govuk-frontend"      % "3.3.0"
     ),
     Concat.groups := Seq(
       "javascripts/application.js" -> group(Seq("lib/govuk-frontend/govuk/all.js"))
@@ -77,6 +77,7 @@ lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
     Resolver.bintrayRepo("hmrc", "snapshots"),
     Resolver.bintrayRepo("hmrc", "release-candidates"),
     Resolver.typesafeRepo("releases"),
-    Resolver.jcenterRepo
+    Resolver.jcenterRepo,
+    "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases"
   )
 )
