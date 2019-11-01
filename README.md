@@ -1,7 +1,7 @@
 
 # play-nunjucks-viewmodel
 
- This library includes an it-server project which gives examples of using nunjucks and the viewmodels, as a useful reference.
+This library accompanies [play-nunjucks](https://github.com/hmrc/play-nunjucks). It includes an it-server project which gives examples of using nunjucks and the viewmodels, as a useful reference.
 
 ## Installation
 
