@@ -7,7 +7,7 @@ lazy val lib = (project in file("."))
   .settings(inConfig(Test)(testSettings): _*)
   .settings(commonSettings: _*)
   .settings(
-    name := "play-nunjucks-viewmodel-spike",
+    name := "play-nunjucks-viewmodel",
     scalacOptions += "-Ypartial-unification",
     libraryDependencies ++= Seq(
       "org.typelevel"     %% "cats-core"       % "1.6.1",
@@ -42,7 +42,7 @@ lazy val itServer = (project in file("it-server"))
       "org.pegdown"            % "pegdown"              % "1.6.0"             % "test",
       "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
       "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
-      "uk.gov.hmrc"            %% "play-nunjucks-spike" % "0.13.0-play-26",
+      "uk.gov.hmrc"            %% "play-nunjucks"       % "0.19.0-play-26",
       "org.webjars.npm"        %  "govuk-frontend"      % "3.3.0"
     ),
     Concat.groups := Seq(
@@ -65,7 +65,7 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
 lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
   organization := "uk.gov.hmrc",
   majorVersion := majorVersionNumber,
-  makePublicallyAvailableOnBintray := false,
+  makePublicallyAvailableOnBintray := true,
   scalaVersion := "2.11.12",
   crossScalaVersions := Seq("2.11.12"),
   scalacOptions ++= Seq(
