@@ -9,5 +9,5 @@ It includes an it-server project which gives examples of using nunjucks and the 
 ## Installation
 
 ```sbt
-libraryDependencies += "uk.gov.hmrc" %% "play-nunjucks-viewmodel" % "x.y.z-play-26"
+libraryDependencies += "uk.gov.hmrc" %% "play-nunjucks-viewmodel" % "x.y.z"
 
