@@ -41,7 +41,7 @@ object Radios {
   }
 
   def yesNo(field: Field)(implicit messages: Messages): Seq[Item] = Seq(
-    Item(id = s"${field.id}-yes", text = msg"site.yes", value = "true", checked = field.value.contains("true")),
+    Item(id = field.id, text = msg"site.yes", value = "true", checked = field.value.contains("true")),
     Item(id = s"${field.id}-no", text = msg"site.no", value = "false", checked = field.value.contains("false"))
   )
 }
