@@ -6,6 +6,7 @@ lazy val lib = (project in file("."))
   .enablePlugins(SbtWeb, SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(commonSettings: _*)
+  .settings(PlayCrossCompilation.playCrossCompilationSettings: _*)
   .settings(
     name := "play-nunjucks-viewmodel",
     scalacOptions += "-Ypartial-unification",
@@ -32,18 +33,26 @@ lazy val itServer = (project in file("it-server"))
   .dependsOn(lib)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(commonSettings: _*)
+  .settings(PlayCrossCompilation.itServerCrossCompilationSettings: _*)
   .settings(
     name := "it-server",
-    libraryDependencies ++= Seq(
-      filters,
-      "org.scalactic"          %% "scalactic"           % "3.0.7"             % "test",
-      "org.scalatest"          %% "scalatest"           % "3.0.7"             % "test",
-      "org.scalacheck"         %% "scalacheck"          % "1.14.0"            % "test",
-      "org.pegdown"            % "pegdown"              % "1.6.0"             % "test",
-      "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
-      "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
-      "uk.gov.hmrc"            %% "play-nunjucks"       % "0.19.0-play-26",
-      "org.webjars.npm"        %  "govuk-frontend"      % "3.3.0"
+    libraryDependencies ++= PlayCrossCompilation.dependencies(
+      shared = Seq(
+        filters,
+        "org.scalactic"          %% "scalactic"           % "3.0.7"             % "test",
+        "org.scalatest"          %% "scalatest"           % "3.0.7"             % "test",
+        "org.scalacheck"         %% "scalacheck"          % "1.14.0"            % "test",
+        "org.pegdown"            %  "pegdown"             % "1.6.0"             % "test",
+        "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
+        "org.webjars.npm"        %  "govuk-frontend"      % "3.3.0"
+      ),
+      play25 = Seq(
+        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.19.0-play-25"
+      ),
+      play26 = Seq(
+        "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
+        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.19.0-play-26"
+      )
     ),
     Concat.groups := Seq(
       "javascripts/application.js" -> group(Seq("lib/govuk-frontend/govuk/all.js"))
