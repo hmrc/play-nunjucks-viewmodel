@@ -5,11 +5,11 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.viewmodels.Table.Cell
 
-final case class Table(caption: Option[String] = None,
+final case class Table(head: Seq[Cell],
+                       rows: Seq[Seq[Cell]],
+                       caption: Option[String] = None,
                        captionClasses: Seq[String] = Seq.empty,
                        firstCellIsHeader: Boolean = false,
-                       head: Seq[Cell],
-                       rows: Seq[Seq[Cell]],
                        classes: Seq[String] = Seq.empty,
                        attributes: Map[String, String] = Map.empty)
 
