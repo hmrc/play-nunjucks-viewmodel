@@ -23,6 +23,14 @@ checkboxes.a = First
 checkboxes.b = Second
 checkboxes.c = Third
 
+
+selectOptions.title = SelectOptions
+selectOptions.a = Recently published
+selectOptions.b = Recently updated
+selectOptions.c = Most views
+selectOptions.d = Most comments
+
+
 booleanProduct.title = Boolean product
 booleanProduct.a = First
 booleanProduct.b = Second
