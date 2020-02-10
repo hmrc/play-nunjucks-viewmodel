@@ -33,6 +33,8 @@ object Table {
   final case class Cell(content: Content,
                         classes: Seq[String] = Seq.empty,
                         format: Option[String] = None,
+                        colspan: Option[String] = None,
+                        rowspan: Option[String] = None,
                         attributes: Map[String, String] = Map.empty
                        ) extends WithContent
 
@@ -43,10 +45,12 @@ object Table {
         (__ \ "html").writeNullable[Html] and
         (__ \ "classes").writeNullable[String] and
         (__ \ "format").writeNullable[String] and
+        (__ \ "colspan").writeNullable[String] and
+        (__ \ "rowspan").writeNullable[String] and
         (__ \ "attributes").writeNullable[Map[String, String]]
       ) { cell =>
       val attributes = Some(cell.attributes).filter(_.nonEmpty)
-      (cell.text, cell.html, classes(cell.classes), cell.format, attributes)
+      (cell.text, cell.html, classes(cell.classes), cell.format, cell.colspan, cell.rowspan, attributes)
     }
   }
 

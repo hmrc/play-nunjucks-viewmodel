@@ -58,6 +58,30 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
       Json.toJson(cell) mustEqual expectedJson
     }
 
+    "must write with colspan" in {
+
+      val cell = Table.Cell(lit"foo", Seq.empty, None, Some("test-format"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "colspan" -> "test-format"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with rowspan" in {
+
+      val cell = Table.Cell(lit"foo", Seq.empty, None, None, Some("test-format"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "rowspan" -> "test-format"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
     "must write with attributes" in {
 
       val cell = Table.Cell(lit"foo")
