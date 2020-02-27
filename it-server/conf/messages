@@ -43,3 +43,22 @@ date.required.1 = A date must include a {0}
 date.required.2 = A date must include a {0} and {1}
 
 summaryList.title = Summary list
+
+table.title = Table
+table.caption = Table caption example
+table.header.c1 = Header cell 1
+table.header.c2 = Header cell 1
+table.header.c3 = Header cell 1
+table.header.c4 = Header cell 1
+table.row1.col1 = Row 1 Column 1
+table.row1.col2 = Row 1 Column 2
+table.row1.col3 = Row 1 Column 3
+table.row1.col4 = Row 1 Column 4
+table.row2.col1 = Row 2 Column 1
+table.row2.col2 = Row 2 Column 2
+table.row2.col3 = Row 2 Column 3
+table.row2.col4 = Row 2 Column 4
+table.row3.col1 = Row 3 Column 1
+table.row3.col2 = Row 3 Column 2
+table.row3.col3 = Row 3 Column 3
+table.row3.col4 = Row 3 Column 4

@@ -1,0 +1,221 @@
+package uk.gov.hmrc.viewmodels
+
+import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import play.api.i18n.Messages
+import play.api.libs.json.{JsArray, Json}
+import uk.gov.hmrc.testutils.stubs.MessagesStub
+import uk.gov.hmrc.viewmodels.Table.Cell
+
+class TableSpec extends FreeSpec with MustMatchers with OptionValues {
+
+  private implicit val messages: Messages = new MessagesStub()
+
+  "Table Cell" - {
+
+    "must write with text content" in {
+
+      val cell = Table.Cell(lit"foo")
+
+      val expectedJson = Json.obj(
+        "text" -> "foo"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with html content" in {
+
+      val cell = Table.Cell(Html("<b>foo</b>"))
+
+      val expectedJson = Json.obj(
+        "html" -> "<b>foo</b>"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with classes" in {
+
+      val cell = Table.Cell(lit"foo", classes = Seq("bar", "baz"))
+
+      val expectedJson = Json.obj(
+        "text"    -> "foo",
+        "classes" -> "bar baz"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with format" in {
+
+      val cell = Table.Cell(lit"foo", Seq.empty, Some("test-format"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "format" -> "test-format"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with colspan" in {
+
+      val cell = Table.Cell(lit"foo", Seq.empty, None, Some("test-format"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "colspan" -> "test-format"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with rowspan" in {
+
+      val cell = Table.Cell(lit"foo", Seq.empty, None, None, Some("test-format"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "rowspan" -> "test-format"
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+
+    "must write with attributes" in {
+
+      val cell = Table.Cell(lit"foo")
+        .copy(attributes = Map("key" -> "value"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "attributes" -> Json.obj(
+          "key" -> "value"
+        )
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+  }
+
+  "Table" - {
+
+    "must write with caption" in {
+
+      val table = Table(caption = Some("test-caption"), head = Seq.empty, rows = tableRows)
+
+      val expectedJson = Json.obj(
+        "caption" -> "test-caption",
+        "firstCellIsHeader" -> false,
+        "rows" -> expectedTableRowsJson
+      )
+
+      Json.toJson(table) mustEqual expectedJson
+    }
+
+    "must write with caption classes" in {
+
+      val table = Table(caption = Some("test-caption"), captionClasses = Seq("bar", "baz"),
+        head = Seq.empty, rows = tableRows)
+
+      val expectedJson = Json.obj(
+        "caption" -> "test-caption",
+        "captionClasses" -> "bar baz",
+        "firstCellIsHeader" -> false,
+        "rows" -> expectedTableRowsJson
+      )
+
+      Json.toJson(table) mustEqual expectedJson
+    }
+
+    "must write with firstCellIsHeader property set" in {
+
+      val table = Table(firstCellIsHeader = true, head = Seq.empty, rows = tableRows)
+
+      val expectedJson = Json.obj(
+        "firstCellIsHeader" -> true,
+        "rows" -> expectedTableRowsJson
+      )
+
+      Json.toJson(table) mustEqual expectedJson
+    }
+
+    "must write header" in {
+
+      val header = Seq(Cell(lit"foo-head"), Cell(lit"bar-head"))
+      val table = Table(head = header, rows = tableRows)
+
+      val expectedJson = Json.obj(
+        "firstCellIsHeader" -> false,
+        "head" -> Json.arr(
+          Json.obj("text" -> "foo-head"),
+          Json.obj("text" -> "bar-head")
+        ),
+        "rows" -> expectedTableRowsJson
+      )
+
+      Json.toJson(table) mustEqual expectedJson
+    }
+
+    "must write rows" in {
+
+      val table = Table(head = Seq.empty, rows = tableRows)
+
+      val expectedJson = Json.obj(
+        "firstCellIsHeader" -> false,
+        "rows" -> expectedTableRowsJson
+      )
+
+      Json.toJson(table) mustEqual expectedJson
+    }
+
+    "must write with classes" in {
+
+      val table = Table(head = Seq.empty, rows = tableRows, classes = Seq("bar", "baz"))
+
+      val expectedJson = Json.obj(
+        "firstCellIsHeader" -> false,
+        "rows" -> expectedTableRowsJson,
+        "classes" -> "bar baz"
+      )
+
+      Json.toJson(table) mustEqual expectedJson
+    }
+
+    "must write with attributes" in {
+
+      val cell = Table.Cell(lit"foo")
+        .copy(attributes = Map("key" -> "value"))
+
+      val expectedJson = Json.obj(
+        "text" -> "foo",
+        "attributes" -> Json.obj(
+          "key" -> "value"
+        )
+      )
+
+      Json.toJson(cell) mustEqual expectedJson
+    }
+  }
+
+  val tableRows: Seq[Seq[Cell]] = Seq(
+    Seq(Cell(lit"foo"), Cell(lit"bar")),
+    Seq(Cell(lit"foo1"), Cell(lit"bar1")),
+    Seq(Cell(lit"foo2"), Cell(lit"bar2"))
+  )
+
+  val expectedTableRowsJson: JsArray = Json.arr(
+    Json.arr(
+      Json.obj("text" -> "foo"),
+      Json.obj("text" -> "bar")
+    ),
+    Json.arr(
+      Json.obj("text" -> "foo1"),
+      Json.obj("text" -> "bar1")
+    ),
+    Json.arr(
+      Json.obj("text" -> "foo2"),
+      Json.obj("text" -> "bar2")
+    )
+  )
+}
