@@ -6,6 +6,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
 import uk.gov.hmrc.viewmodels._
+import uk.gov.hmrc.viewmodels.Table.Cell
 
 import scala.concurrent.ExecutionContext
 
