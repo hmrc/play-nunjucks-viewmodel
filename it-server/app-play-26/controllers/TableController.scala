@@ -6,13 +6,14 @@ import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
 import uk.gov.hmrc.viewmodels._
+import uk.gov.hmrc.viewmodels.Table.Cell
 
 import scala.concurrent.ExecutionContext
 
 class TableController @Inject()(
-                                       renderer: NunjucksRenderer,
-                                       cc: ControllerComponents
-                                     )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+                                 renderer: NunjucksRenderer,
+                                 cc: ControllerComponents
+                               )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
 
   def get: Action[AnyContent] = Action.async {
     implicit request =>
@@ -25,20 +26,26 @@ class TableController @Inject()(
           Cell(msg"table.header.c3", classes = Seq("govuk-!-width-one-quarter")),
           Cell(msg"table.header.c4", classes = Seq("govuk-!-width-one-quarter")))
 
-        val rows = members.map { data =>
+        val rows: Seq[Seq[Cell]] =
           Seq(
-            Cell(msg"table.row1.col1", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row1.col2", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row1.col3", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row1.col4", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row2.col1", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row2.col2", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row2.col3", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row2.col4", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row3.col1", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row3.col2", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row3.col3", classes = Seq("govuk-!-width-one-quarter")),
-            Cell(msg"table.row3.col4", classes = Seq("govuk-!-width-one-quarter"))
+            Seq(
+              Cell(msg"table.row1.col1", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row1.col2", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row1.col3", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row1.col4", classes = Seq("govuk-!-width-one-quarter"))
+            ),
+            Seq(
+              Cell(msg"table.row2.col1", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row2.col2", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row2.col3", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row2.col4", classes = Seq("govuk-!-width-one-quarter"))
+            ),
+            Seq(
+              Cell(msg"table.row3.col1", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row3.col2", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row3.col3", classes = Seq("govuk-!-width-one-quarter")),
+              Cell(msg"table.row3.col4", classes = Seq("govuk-!-width-one-quarter"))
+            )
           )
 
         Table(head = head, rows = rows, caption = Some(msg"table.caption"), firstCellIsHeader = true)

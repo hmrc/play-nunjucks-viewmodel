@@ -7,7 +7,7 @@ import uk.gov.hmrc.viewmodels.Table.Cell
 
 final case class Table(head: Seq[Cell],
                        rows: Seq[Seq[Cell]],
-                       caption: Option[String] = None,
+                       caption: Option[Text] = None,
                        captionClasses: Seq[String] = Seq.empty,
                        firstCellIsHeader: Boolean = false,
                        classes: Seq[String] = Seq.empty,
@@ -16,7 +16,7 @@ final case class Table(head: Seq[Cell],
 object Table {
 
   implicit def writes(implicit messages: Messages): OWrites[Table] = (
-    (__ \ "caption").writeNullable[String] and
+    (__ \ "caption").writeNullable[Text] and
       (__ \ "captionClasses").writeNullable[String] and
       (__ \ "firstCellIsHeader").write[Boolean] and
       (__ \ "head").writeNullable[Seq[Cell]] and

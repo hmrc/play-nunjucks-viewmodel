@@ -48,7 +48,7 @@ class TableController @Inject()(
             )
           )
 
-        Table(head = head, rows = rows, caption = Some(messagesApi("table.caption")), firstCellIsHeader = true)
+        Table(head = head, rows = rows, caption = Some(msg"table.caption"), firstCellIsHeader = true)
       }
 
       renderer.render("table.njk", Json.obj(

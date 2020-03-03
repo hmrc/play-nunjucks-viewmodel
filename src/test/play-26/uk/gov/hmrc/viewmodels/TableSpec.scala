@@ -4,6 +4,7 @@ import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, Json}
 import uk.gov.hmrc.viewmodels.Table.Cell
+import uk.gov.hmrc.viewmodels.Text.Literal
 import play.api.test.Helpers
 
 class TableSpec extends FreeSpec with MustMatchers with OptionValues {
@@ -78,7 +79,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with caption" in {
 
-      val table = Table(caption = Some("test-caption"), head = Seq.empty, rows = tableRows)
+      val table = Table(caption = Some(Literal("test-caption")), head = Seq.empty, rows = tableRows)
 
       val expectedJson = Json.obj(
         "caption" -> "test-caption",
@@ -91,7 +92,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with caption classes" in {
 
-      val table = Table(caption = Some("test-caption"), captionClasses = Seq("bar", "baz"),
+      val table = Table(caption = Some(Literal("test-caption")), captionClasses = Seq("bar", "baz"),
         head = Seq.empty, rows = tableRows)
 
       val expectedJson = Json.obj(

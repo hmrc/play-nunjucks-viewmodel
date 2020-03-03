@@ -5,10 +5,32 @@ import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, Json}
 import uk.gov.hmrc.testutils.stubs.MessagesStub
 import uk.gov.hmrc.viewmodels.Table.Cell
+import uk.gov.hmrc.viewmodels.Text.Literal
 
 class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
   private implicit val messages: Messages = new MessagesStub()
+
+  val tableRows: Seq[Seq[Cell]] = Seq(
+    Seq(Cell(lit"foo"), Cell(lit"bar")),
+    Seq(Cell(lit"foo1"), Cell(lit"bar1")),
+    Seq(Cell(lit"foo2"), Cell(lit"bar2"))
+  )
+
+  val expectedTableRowsJson: JsArray = Json.arr(
+    Json.arr(
+      Json.obj("text" -> "foo"),
+      Json.obj("text" -> "bar")
+    ),
+    Json.arr(
+      Json.obj("text" -> "foo1"),
+      Json.obj("text" -> "bar1")
+    ),
+    Json.arr(
+      Json.obj("text" -> "foo2"),
+      Json.obj("text" -> "bar2")
+    )
+  )
 
   "Table Cell" - {
 
@@ -102,7 +124,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with caption" in {
 
-      val table = Table(caption = Some("test-caption"), head = Seq.empty, rows = tableRows)
+      val table = Table(caption = Some(Literal("test-caption")), head = Seq.empty, rows = tableRows)
 
       val expectedJson = Json.obj(
         "caption" -> "test-caption",
@@ -115,7 +137,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with caption classes" in {
 
-      val table = Table(caption = Some("test-caption"), captionClasses = Seq("bar", "baz"),
+      val table = Table(caption = Some(Literal("test-caption")), captionClasses = Seq("bar", "baz"),
         head = Seq.empty, rows = tableRows)
 
       val expectedJson = Json.obj(
@@ -198,24 +220,4 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
     }
   }
 
-  val tableRows: Seq[Seq[Cell]] = Seq(
-    Seq(Cell(lit"foo"), Cell(lit"bar")),
-    Seq(Cell(lit"foo1"), Cell(lit"bar1")),
-    Seq(Cell(lit"foo2"), Cell(lit"bar2"))
-  )
-
-  val expectedTableRowsJson: JsArray = Json.arr(
-    Json.arr(
-      Json.obj("text" -> "foo"),
-      Json.obj("text" -> "bar")
-    ),
-    Json.arr(
-      Json.obj("text" -> "foo1"),
-      Json.obj("text" -> "bar1")
-    ),
-    Json.arr(
-      Json.obj("text" -> "foo2"),
-      Json.obj("text" -> "bar2")
-    )
-  )
 }
