@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.viewmodels
 
 import java.time.LocalDate
@@ -5,21 +21,20 @@ import java.time.LocalDate
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import play.api.data.validation.{Constraint, Invalid}
 import play.api.data.{Form, Forms}
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.{JsArray, JsNull, Json}
+import play.api.test.Helpers
 import uk.gov.hmrc.mappings.LocalDateMapping
-import uk.gov.hmrc.testutils.stubs.MessagesStub
-
 
 class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
+
+  implicit val messages: Messages = Helpers.stubMessages()
 
   "form writes" - {
 
     "must write a single field" - {
 
       "with no value" in {
-
-        implicit val messages: Messages = new MessagesStub()
 
         val form = Form(
           "foo" -> Forms.text
@@ -28,9 +43,9 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
         val expectedJson = Json.obj(
           "foo" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           ),
-          "errors" -> JsArray()
+          "errors" -> JsArray.empty
         )
 
         val json = Json.toJson(form)
@@ -39,8 +54,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       }
 
       "with a value" in {
-
-        implicit val messages: Messages = new MessagesStub()
 
         val form = Form(
           "foo" -> Forms.text
@@ -51,7 +64,7 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
             "value" -> "foobar",
             "values" -> Json.arr("foobar")
           ),
-          "errors" -> JsArray()
+          "errors" -> JsArray.empty
         )
 
         val json = Json.toJson(form)
@@ -60,8 +73,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       }
 
       "with multiple values" in {
-
-        implicit val messages: Messages = new MessagesStub()
 
         val form = Form(
           "foo" -> Forms.seq(Forms.text)
@@ -72,7 +83,7 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
             "value" -> JsNull,
             "values" -> Json.arr("bar", "baz")
           ),
-          "errors" -> JsArray()
+          "errors" -> JsArray.empty
         )
 
         val json = Json.toJson(form)
@@ -81,8 +92,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       }
 
       "with errors" in {
-
-        implicit val messages: Messages = new MessagesStub()
 
         val form = Form(
           "foo" -> Forms.nonEmptyText
@@ -111,9 +120,13 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
       "with errors with arguments in their message" in {
 
-        implicit val messages: Messages = new MessagesStub(Map(
-          "foo.invalid" -> "first arg: {0}, second arg: {1}"
+        val messagesApi: MessagesApi = Helpers.stubMessagesApi(Map(
+          "en" -> Map(
+            "foo.invalid" -> "first arg: {0}, second arg: {1}"
+          )
         ))
+
+        implicit val messages: Messages = Helpers.stubMessages(messagesApi)
 
         val constraint: Constraint[String] = Constraint {
           _ => Invalid("foo.invalid", "bar", 13)
@@ -151,8 +164,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "with no value" in {
 
-      implicit val messages: Messages = new MessagesStub()
-
       val form = Form(
         "date" -> new LocalDateMapping()
       )
@@ -160,21 +171,21 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       val expectedJson = Json.obj(
         "date" -> Json.obj(
           "value" -> JsNull,
-          "values" -> JsArray(),
+          "values" -> JsArray.empty,
           "day" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           ),
           "month" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           ),
           "year" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           )
         ),
-        "errors" -> JsArray()
+        "errors" -> JsArray.empty
       )
 
       val json = Json.toJson(form)
@@ -184,8 +195,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "with a value" in {
 
-      implicit val messages: Messages = new MessagesStub()
-
       val form = Form(
         "date" -> new LocalDateMapping()
       ).fill(LocalDate.of(2001, 2, 1))
@@ -193,7 +202,7 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       val expectedJson = Json.obj(
         "date" -> Json.obj(
           "value" -> JsNull,
-          "values" -> JsArray(),
+          "values" -> JsArray.empty,
           "day" -> Json.obj(
             "value" -> "1",
             "values" -> Json.arr("1")
@@ -207,7 +216,7 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
             "values" -> Json.arr("2001")
           )
         ),
-        "errors" -> JsArray()
+        "errors" -> JsArray.empty
       )
 
       val json = Json.toJson(form)
@@ -217,8 +226,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "with errors" in {
 
-      implicit val messages: Messages = new MessagesStub()
-
       val form = Form(
         "date" -> new LocalDateMapping()
       ).bind(Map.empty[String, String])
@@ -226,21 +233,21 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       val expectedJson = Json.obj(
         "date" -> Json.obj(
           "value" -> JsNull,
-          "values" -> JsArray(),
+          "values" -> JsArray.empty,
           "error" -> Json.obj(
             "text" -> "date.required"
           ),
           "day" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           ),
           "month" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           ),
           "year" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray()
+            "values" -> JsArray.empty
           )
         ),
         "errors" -> Json.arr(
@@ -258,8 +265,6 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "with errors on a nested field" in {
 
-      implicit val messages: Messages = new MessagesStub()
-
       val form = Form(
         "password" -> Forms.mapping(
           "first" -> Forms.nonEmptyText,
@@ -270,14 +275,14 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       val expectedJson = Json.obj(
         "password" -> Json.obj(
           "value" -> JsNull,
-          "values" -> JsArray(),
+          "values" -> JsArray.empty,
           "first" -> Json.obj(
             "value" -> "foobar",
             "values" -> Json.arr("foobar")
           ),
           "second" -> Json.obj(
             "value" -> JsNull,
-            "values" -> JsArray(),
+            "values" -> JsArray.empty,
             "error" -> Json.obj(
               "text" -> "error.required"
             )

@@ -42,18 +42,9 @@ lazy val libDependencies: Seq[ModuleID] = dependencies(
 
     compile ++ test
   },
-  play25 = {
-    val test = Seq(
-      "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1"
-    ).map(_ % Test)
-    test
-  },
-  play26 = {
-    val test = Seq(
-      "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2"
-    )
-    test
-  }
+  play26 = Seq(
+    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test"
+  )
 )
 
 (test in(lib.project, Test)) := {
@@ -76,15 +67,12 @@ lazy val itServer = (project in file("it-server"))
         "org.scalatest"          %% "scalatest"           % "3.0.7"             % "test",
         "org.scalacheck"         %% "scalacheck"          % "1.14.0"            % "test",
         "org.pegdown"            %  "pegdown"             % "1.6.0"             % "test",
-        "org.scalatestplus.play" %% "scalatestplus-play"  % "2.0.1"             % "test",
         "org.webjars.npm"        %  "govuk-frontend"      % "3.3.0"
-      ),
-      play25 = Seq(
-        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.23.0-play-25"
       ),
       play26 = Seq(
         "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
-        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.23.0-play-26"
+        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.23.0-play-26",
+        "org.scalatestplus.play" %% "scalatestplus-play"  % "3.1.2" % "test",
       )
     ),
     Concat.groups := Seq(
