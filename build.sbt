@@ -70,12 +70,12 @@ lazy val itServer = (project in file("it-server"))
       ),
       play26 = Seq(
         "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
-        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.25.0-play-26",
+        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.26.0-play-26",
         "org.scalatestplus.play" %% "scalatestplus-play"  % "3.1.2" % "test",
       ),
       play27 = Seq(
         "com.typesafe.play"      %% "play-guice"          % PlayVersion.current,
-        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.25.0-play-27",
+        "uk.gov.hmrc"            %% "play-nunjucks"       % "0.26.0-play-27",
         "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % "test"
       )
     ),
