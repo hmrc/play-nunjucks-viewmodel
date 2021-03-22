@@ -127,12 +127,13 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with classes" in {
 
-      val action = SummaryList.Action(lit"foo", "bar")
+      val action = SummaryList
+        .Action(lit"foo", "bar")
         .copy(classes = Seq("spoon", "fork"))
 
       val expectedJson = Json.obj(
-        "text" -> "foo",
-        "href" -> "bar",
+        "text"    -> "foo",
+        "href"    -> "bar",
         "classes" -> "spoon fork"
       )
 
@@ -141,12 +142,13 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with visually hidden text" in {
 
-      val action = SummaryList.Action(lit"foo", "bar")
+      val action = SummaryList
+        .Action(lit"foo", "bar")
         .copy(visuallyHiddenText = Some(lit"baz"))
 
       val expectedJson = Json.obj(
-        "text" -> "foo",
-        "href" -> "bar",
+        "text"               -> "foo",
+        "href"               -> "bar",
         "visuallyHiddenText" -> "baz"
       )
 
@@ -155,12 +157,13 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with attributes" in {
 
-      val action = SummaryList.Action(lit"foo", "bar")
+      val action       = SummaryList
+        .Action(lit"foo", "bar")
         .copy(attributes = Map("key" -> "value"))
 
       val expectedJson = Json.obj(
-        "text" -> "foo",
-        "href" -> "bar",
+        "text"       -> "foo",
+        "href"       -> "bar",
         "attributes" -> Json.obj(
           "key" -> "value"
         )
@@ -174,8 +177,8 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with an action" in {
 
-      val key = SummaryList.Key(lit"foo")
-      val value = SummaryList.Value(lit"bar")
+      val key    = SummaryList.Key(lit"foo")
+      val value  = SummaryList.Value(lit"bar")
       val action = SummaryList.Action(lit"baz", "quux")
 
       val row = SummaryList.Row(
@@ -187,8 +190,8 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
       )
 
       val expectedJson = Json.obj(
-        "key" -> key,
-        "value" -> value,
+        "key"     -> key,
+        "value"   -> value,
         "actions" -> Json.obj(
           "items" -> Json.arr(
             action
@@ -201,7 +204,7 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write without actions" in {
 
-      val key = SummaryList.Key(lit"foo")
+      val key   = SummaryList.Key(lit"foo")
       val value = SummaryList.Value(lit"bar")
 
       val row = SummaryList.Row(
@@ -210,7 +213,7 @@ class SummaryListSpec extends FreeSpec with MustMatchers with OptionValues {
       )
 
       val expectedJson = Json.obj(
-        "key" -> key,
+        "key"   -> key,
         "value" -> value
       )
 

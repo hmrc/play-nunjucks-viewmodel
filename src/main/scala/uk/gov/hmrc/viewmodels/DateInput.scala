@@ -27,17 +27,15 @@ object DateInput {
 
   object ViewModel {
     implicit def writes(implicit messages: Messages): OWrites[ViewModel] =
-      OWrites {
-        viewmodel =>
-          Json.obj(
-            "items" -> viewmodel.items,
-            "error" -> viewmodel.error.map {
-              error =>
-                Json.obj(
-                  "text" -> error
-                )
-            }
-          )
+      OWrites { viewmodel =>
+        Json.obj(
+          "items" -> viewmodel.items,
+          "error" -> viewmodel.error.map { error =>
+            Json.obj(
+              "text" -> error
+            )
+          }
+        )
       }
   }
 

@@ -68,7 +68,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
       val cell = Table.Cell(lit"foo", Seq.empty, Some("test-format"))
 
       val expectedJson = Json.obj(
-        "text" -> "foo",
+        "text"   -> "foo",
         "format" -> "test-format"
       )
 
@@ -77,11 +77,12 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with attributes" in {
 
-      val cell = Table.Cell(lit"foo")
+      val cell         = Table
+        .Cell(lit"foo")
         .copy(attributes = Map("key" -> "value"))
 
       val expectedJson = Json.obj(
-        "text" -> "foo",
+        "text"       -> "foo",
         "attributes" -> Json.obj(
           "key" -> "value"
         )
@@ -98,9 +99,9 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
       val table = Table(caption = Some(Literal("test-caption")), head = Seq.empty, rows = tableRows)
 
       val expectedJson = Json.obj(
-        "caption" -> "test-caption",
+        "caption"           -> "test-caption",
         "firstCellIsHeader" -> false,
-        "rows" -> expectedTableRowsJson
+        "rows"              -> expectedTableRowsJson
       )
 
       Json.toJson(table) mustEqual expectedJson
@@ -108,14 +109,18 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with caption classes" in {
 
-      val table = Table(caption = Some(Literal("test-caption")), captionClasses = Seq("bar", "baz"),
-        head = Seq.empty, rows = tableRows)
+      val table = Table(
+        caption = Some(Literal("test-caption")),
+        captionClasses = Seq("bar", "baz"),
+        head = Seq.empty,
+        rows = tableRows
+      )
 
       val expectedJson = Json.obj(
-        "caption" -> "test-caption",
-        "captionClasses" -> "bar baz",
+        "caption"           -> "test-caption",
+        "captionClasses"    -> "bar baz",
         "firstCellIsHeader" -> false,
-        "rows" -> expectedTableRowsJson
+        "rows"              -> expectedTableRowsJson
       )
 
       Json.toJson(table) mustEqual expectedJson
@@ -127,7 +132,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
       val expectedJson = Json.obj(
         "firstCellIsHeader" -> true,
-        "rows" -> expectedTableRowsJson
+        "rows"              -> expectedTableRowsJson
       )
 
       Json.toJson(table) mustEqual expectedJson
@@ -136,15 +141,15 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
     "must write header" in {
 
       val header = Seq(Cell(lit"foo-head"), Cell(lit"bar-head"))
-      val table = Table(head = header, rows = tableRows)
+      val table  = Table(head = header, rows = tableRows)
 
       val expectedJson = Json.obj(
         "firstCellIsHeader" -> false,
-        "head" -> Json.arr(
+        "head"              -> Json.arr(
           Json.obj("text" -> "foo-head"),
           Json.obj("text" -> "bar-head")
         ),
-        "rows" -> expectedTableRowsJson
+        "rows"              -> expectedTableRowsJson
       )
 
       Json.toJson(table) mustEqual expectedJson
@@ -156,7 +161,7 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
       val expectedJson = Json.obj(
         "firstCellIsHeader" -> false,
-        "rows" -> expectedTableRowsJson
+        "rows"              -> expectedTableRowsJson
       )
 
       Json.toJson(table) mustEqual expectedJson
@@ -168,8 +173,8 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
       val expectedJson = Json.obj(
         "firstCellIsHeader" -> false,
-        "rows" -> expectedTableRowsJson,
-        "classes" -> "bar baz"
+        "rows"              -> expectedTableRowsJson,
+        "classes"           -> "bar baz"
       )
 
       Json.toJson(table) mustEqual expectedJson
@@ -177,11 +182,12 @@ class TableSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "must write with attributes" in {
 
-      val cell = Table.Cell(lit"foo")
+      val cell         = Table
+        .Cell(lit"foo")
         .copy(attributes = Map("key" -> "value"))
 
       val expectedJson = Json.obj(
-        "text" -> "foo",
+        "text"       -> "foo",
         "attributes" -> Json.obj(
           "key" -> "value"
         )

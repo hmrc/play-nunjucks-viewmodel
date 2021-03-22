@@ -32,33 +32,39 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
     "must bind a valid date" in {
 
-      val result = form.bind(Map(
-        "date.day"   -> "1",
-        "date.month" -> "2",
-        "date.year"  -> "2001"
-      ))
+      val result = form.bind(
+        Map(
+          "date.day"   -> "1",
+          "date.month" -> "2",
+          "date.year"  -> "2001"
+        )
+      )
 
       result.value.value mustEqual LocalDate.of(2001, 2, 1)
     }
 
     "must fail to bind an invalid date" in {
 
-      val result = form.bind(Map(
-        "date.day"   -> "99",
-        "date.month" -> "2",
-        "date.year"  -> "2001"
-      ))
+      val result = form.bind(
+        Map(
+          "date.day"   -> "99",
+          "date.month" -> "2",
+          "date.year"  -> "2001"
+        )
+      )
 
       result.errors must contain only (FormError("date", Seq("date.invalid")))
     }
 
     "must fail to bind a date with all empty fields" in {
 
-      val result = form.bind(Map(
-        "date.day"   -> "",
-        "date.month" -> "",
-        "date.year"  -> ""
-      ))
+      val result = form.bind(
+        Map(
+          "date.day"   -> "",
+          "date.month" -> "",
+          "date.year"  -> ""
+        )
+      )
 
       result.errors must contain only (FormError("date", Seq("date.required")))
     }
@@ -74,30 +80,36 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
       "day field" in {
 
-        val result = form.bind(Map(
-          "date.month" -> "1",
-          "date.year"  -> "2001"
-        ))
+        val result = form.bind(
+          Map(
+            "date.month" -> "1",
+            "date.year"  -> "2001"
+          )
+        )
 
         result.errors must contain only (FormError("date", Seq("date.required.1"), Seq(msg"site.day")))
       }
 
       "month field" in {
 
-        val result = form.bind(Map(
-          "date.day" -> "1",
-          "date.year"  -> "2001"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"  -> "1",
+            "date.year" -> "2001"
+          )
+        )
 
         result.errors must contain only (FormError("date.month", Seq("date.required.1"), Seq(msg"site.month")))
       }
 
       "year field" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "1",
-          "date.month" -> "2"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "1",
+            "date.month" -> "2"
+          )
+        )
 
         result.errors must contain only (FormError("date.year", Seq("date.required.1"), Seq(msg"site.year")))
       }
@@ -107,29 +119,39 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
       "day and month fields" in {
 
-        val result = form.bind(Map(
-          "date.year" -> "2001"
-        ))
+        val result = form.bind(
+          Map(
+            "date.year" -> "2001"
+          )
+        )
 
         result.errors must contain only (FormError("date", Seq("date.required.2"), Seq(msg"site.day", msg"site.month")))
       }
 
       "day and year fields" in {
 
-        val result = form.bind(Map(
-          "date.month" -> "1"
-        ))
+        val result = form.bind(
+          Map(
+            "date.month" -> "1"
+          )
+        )
 
         result.errors must contain only (FormError("date", Seq("date.required.2"), Seq(msg"site.day", msg"site.year")))
       }
 
       "month and year fields" in {
 
-        val result = form.bind(Map(
-          "date.day" -> "1"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day" -> "1"
+          )
+        )
 
-        result.errors must contain only (FormError("date.month", Seq("date.required.2"), Seq(msg"site.month", msg"site.year")))
+        result.errors must contain only (FormError(
+          "date.month",
+          Seq("date.required.2"),
+          Seq(msg"site.month", msg"site.year")
+        ))
       }
     }
 
@@ -137,44 +159,52 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
       "day field" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "foo",
-          "date.month" -> "1",
-          "date.year"  -> "2001"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "foo",
+            "date.month" -> "1",
+            "date.year"  -> "2001"
+          )
+        )
 
         result.errors must contain only (FormError("date", Seq("date.invalid")))
       }
 
       "month field" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "1",
-          "date.month" -> "foo",
-          "date.year"  -> "2001"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "1",
+            "date.month" -> "foo",
+            "date.year"  -> "2001"
+          )
+        )
 
         result.errors must contain only (FormError("date", Seq("date.invalid")))
       }
 
       "year field" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "1",
-          "date.month" -> "2",
-          "date.year"  -> "foo"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "1",
+            "date.month" -> "2",
+            "date.year"  -> "foo"
+          )
+        )
 
         result.errors must contain only (FormError("date", Seq("date.invalid")))
       }
 
       "day and month fields" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "foo",
-          "date.month" -> "foo",
-          "date.year"  -> "2001"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "foo",
+            "date.month" -> "foo",
+            "date.year"  -> "2001"
+          )
+        )
 
         result.errors.length mustEqual 1
         result.errors must contain only (FormError("date", Seq("date.invalid")))
@@ -182,11 +212,13 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
       "day and year fields" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "foo",
-          "date.month" -> "1",
-          "date.year"  -> "foo"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "foo",
+            "date.month" -> "1",
+            "date.year"  -> "foo"
+          )
+        )
 
         result.errors.length mustEqual 1
         result.errors must contain only (FormError("date", Seq("date.invalid")))
@@ -194,11 +226,13 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
       "month and year fields" in {
 
-        val result = form.bind(Map(
-          "date.day"   -> "1",
-          "date.month" -> "foo",
-          "date.year"  -> "foo"
-        ))
+        val result = form.bind(
+          Map(
+            "date.day"   -> "1",
+            "date.month" -> "foo",
+            "date.year"  -> "foo"
+          )
+        )
 
         result.errors.length mustEqual 1
         result.errors must contain only (FormError("date", Seq("date.invalid")))
@@ -209,7 +243,7 @@ class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues 
 
       val result = form.fill(LocalDate.of(2001, 2, 1))
 
-      result.data must contain only (
+      result.data  must contain only (
         "date.day"   -> "1",
         "date.month" -> "2",
         "date.year"  -> "2001"

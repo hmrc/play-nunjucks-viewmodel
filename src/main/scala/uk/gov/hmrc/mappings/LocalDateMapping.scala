@@ -28,10 +28,10 @@ import scala.util.control.Exception.nonFatalCatch
 import scala.util.{Failure, Success, Try}
 
 class LocalDateMapping(
-                        override val key: String = "",
-                        override val constraints: Seq[Constraint[LocalDate]] = Seq.empty,
-                        formatter: Formatter[Int] = LocalDateMapping.intFormatter()
-                      ) extends Mapping[LocalDate] {
+  override val key: String = "",
+  override val constraints: Seq[Constraint[LocalDate]] = Seq.empty,
+  formatter: Formatter[Int] = LocalDateMapping.intFormatter()
+) extends Mapping[LocalDate] {
 
   private sealed trait DateField {
     def name(prefix: String): String
@@ -40,24 +40,24 @@ class LocalDateMapping(
 
   private case object Day extends DateField {
     override def name(prefix: String): String = prefix
-    override def messageKey: String = "site.day"
+    override def messageKey: String           = "site.day"
   }
 
   private case object Month extends DateField {
-    override def name(prefix: String): String = s"${prefix}.month"
-    override def messageKey: String = "site.month"
+    override def name(prefix: String): String = s"$prefix.month"
+    override def messageKey: String           = "site.month"
   }
 
   private case object Year extends DateField {
-    override def name(prefix: String): String = s"${prefix}.year"
-    override def messageKey: String = "site.year"
+    override def name(prefix: String): String = s"$prefix.year"
+    override def messageKey: String           = "site.year"
   }
 
   private val fieldKeys: Seq[DateField] = List(Day, Month, Year)
 
-  private val dayField = Forms.of(formatter).withPrefix("day").withPrefix(key)
+  private val dayField   = Forms.of(formatter).withPrefix("day").withPrefix(key)
   private val monthField = Forms.of(formatter).withPrefix("month").withPrefix(key)
-  private val yearField = Forms.of(formatter).withPrefix("year").withPrefix(key)
+  private val yearField  = Forms.of(formatter).withPrefix("year").withPrefix(key)
 
   override val mappings: Seq[Mapping[_]] =
     Seq(this) ++ dayField.mappings ++ monthField.mappings ++ yearField.mappings
@@ -67,9 +67,8 @@ class LocalDateMapping(
     def bindField(mapping: Mapping[Int]): Either[List[FormError], Int] =
       mapping.bind(data).leftMap(_.toList)
 
-    val fields = fieldKeys.map {
-      field =>
-        field -> data.get(s"$key.${field.toString.toLowerCase}").filter(_.nonEmpty)
+    val fields = fieldKeys.map { field =>
+      field -> data.get(s"$key.${field.toString.toLowerCase}").filter(_.nonEmpty)
     }.toMap
 
     val missingFields = fields
@@ -79,9 +78,25 @@ class LocalDateMapping(
 
     val requiredFields = fields.count(_._2.isDefined) match {
       case 2 =>
-        Left(List(FormError(missingFields.head.name(key), "date.required.1", missingFields.map(f => Text.Message(f.messageKey)))))
+        Left(
+          List(
+            FormError(
+              missingFields.head.name(key),
+              "date.required.1",
+              missingFields.map(f => Text.Message(f.messageKey))
+            )
+          )
+        )
       case 1 =>
-        Left(List(FormError(missingFields.head.name(key), "date.required.2", missingFields.map(f => Text.Message(f.messageKey)))))
+        Left(
+          List(
+            FormError(
+              missingFields.head.name(key),
+              "date.required.2",
+              missingFields.map(f => Text.Message(f.messageKey))
+            )
+          )
+        )
       case 0 =>
         Left(List(FormError(key, "date.required")))
       case _ =>
@@ -89,26 +104,25 @@ class LocalDateMapping(
     }
 
     val compiledDate = (
-        bindField(dayField),
-        bindField(monthField),
-        bindField(yearField)
-      ).parTupled.flatMap {
-        case (day, month, year) =>
-          toDate(key, day, month, year)
-      }
+      bindField(dayField),
+      bindField(monthField),
+      bindField(yearField)
+    ).parTupled.flatMap { case (day, month, year) =>
+      toDate(key, day, month, year)
+    }
 
     (requiredFields &> compiledDate).leftMap(_.headOption.toList)
   }
 
   override def unbind(value: LocalDate): Map[String, String] =
     dayField.unbind(value.getDayOfMonth) ++
-    monthField.unbind(value.getMonthValue) ++
-    yearField.unbind(value.getYear)
+      monthField.unbind(value.getMonthValue) ++
+      yearField.unbind(value.getYear)
 
   override def unbindAndValidate(value: LocalDate): (Map[String, String], Seq[FormError]) = {
-    val (dayMap, dayErrors) = dayField.unbindAndValidate(value.getDayOfMonth)
+    val (dayMap, dayErrors)     = dayField.unbindAndValidate(value.getDayOfMonth)
     val (monthMap, monthErrors) = monthField.unbindAndValidate(value.getMonthValue)
-    val (yearMap, yearErrors) = yearField.unbindAndValidate(value.getYear)
+    val (yearMap, yearErrors)   = yearField.unbindAndValidate(value.getYear)
     (dayMap ++ monthMap ++ yearMap, dayErrors ++ monthErrors ++ yearErrors)
   }
 
@@ -122,7 +136,7 @@ class LocalDateMapping(
     Try(LocalDate.of(year, month, day)) match {
       case Success(date) =>
         Right(date)
-      case Failure(_) =>
+      case Failure(_)    =>
         Left(List(FormError(key, "date.invalid")))
     }
 }
@@ -130,8 +144,8 @@ class LocalDateMapping(
 object LocalDateMapping {
 
   def intFormatter(
-                    invalidMessageKey: String = "date.invalid"
-                  ): Formatter[Int] = new Formatter[Int] {
+    invalidMessageKey: String = "date.invalid"
+  ): Formatter[Int] = new Formatter[Int] {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = {
 
@@ -142,8 +156,8 @@ object LocalDateMapping {
 
       data.get(key) match {
         case Some("") | None => Left(List.empty)
-        case Some(value)     => nonFatalCatch.either(value.toInt)
-          .left.map(_ => List(FormError(parentKey.getOrElse(key), invalidMessageKey)))
+        case Some(value)     =>
+          nonFatalCatch.either(value.toInt).left.map(_ => List(FormError(parentKey.getOrElse(key), invalidMessageKey)))
       }
     }
 
