@@ -21,13 +21,15 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.viewmodels.Table.Cell
 
-final case class Table(head: Seq[Cell],
-                       rows: Seq[Seq[Cell]],
-                       caption: Option[Text] = None,
-                       captionClasses: Seq[String] = Seq.empty,
-                       firstCellIsHeader: Boolean = false,
-                       classes: Seq[String] = Seq.empty,
-                       attributes: Map[String, String] = Map.empty)
+final case class Table(
+  head: Seq[Cell],
+  rows: Seq[Seq[Cell]],
+  caption: Option[Text] = None,
+  captionClasses: Seq[String] = Seq.empty,
+  firstCellIsHeader: Boolean = false,
+  classes: Seq[String] = Seq.empty,
+  attributes: Map[String, String] = Map.empty
+)
 
 object Table {
 
@@ -39,20 +41,28 @@ object Table {
       (__ \ "rows").write[Seq[Seq[Cell]]] and
       (__ \ "classes").writeNullable[String] and
       (__ \ "attributes").writeNullable[Map[String, String]]
-    ) { table =>
-    val head = Some(table.head).filter(_.nonEmpty)
+  ) { table =>
+    val head       = Some(table.head).filter(_.nonEmpty)
     val attributes = Some(table.attributes).filter(_.nonEmpty)
-    (table.caption, classes(table.captionClasses), table.firstCellIsHeader,
-      head, table.rows, classes(table.classes), attributes)
+    (
+      table.caption,
+      classes(table.captionClasses),
+      table.firstCellIsHeader,
+      head,
+      table.rows,
+      classes(table.classes),
+      attributes
+    )
   }
 
-  final case class Cell(content: Content,
-                        classes: Seq[String] = Seq.empty,
-                        format: Option[String] = None,
-                        colspan: Option[String] = None,
-                        rowspan: Option[String] = None,
-                        attributes: Map[String, String] = Map.empty
-                       ) extends WithContent
+  final case class Cell(
+    content: Content,
+    classes: Seq[String] = Seq.empty,
+    format: Option[String] = None,
+    colspan: Option[String] = None,
+    rowspan: Option[String] = None,
+    attributes: Map[String, String] = Map.empty
+  ) extends WithContent
 
   object Cell {
 
@@ -64,7 +74,7 @@ object Table {
         (__ \ "colspan").writeNullable[String] and
         (__ \ "rowspan").writeNullable[String] and
         (__ \ "attributes").writeNullable[Map[String, String]]
-      ) { cell =>
+    ) { cell =>
       val attributes = Some(cell.attributes).filter(_.nonEmpty)
       (cell.text, cell.html, classes(cell.classes), cell.format, cell.colspan, cell.rowspan, attributes)
     }

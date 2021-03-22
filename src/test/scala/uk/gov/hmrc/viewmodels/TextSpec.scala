@@ -22,13 +22,15 @@ import play.api.test.Helpers
 
 class TextSpec extends FreeSpec with MustMatchers {
 
-  val messagesApi: MessagesApi = Helpers.stubMessagesApi(Map(
-    "en" -> Map(
-      "basic"      -> "lorem ipsum dolor sit amet",
-      "substitute" -> "Hello, {0}!",
-      "name"       -> "Bar"
+  val messagesApi: MessagesApi = Helpers.stubMessagesApi(
+    Map(
+      "en" -> Map(
+        "basic"      -> "lorem ipsum dolor sit amet",
+        "substitute" -> "Hello, {0}!",
+        "name"       -> "Bar"
+      )
     )
-  ))
+  )
 
   implicit val messages: Messages = Helpers.stubMessages(messagesApi)
 

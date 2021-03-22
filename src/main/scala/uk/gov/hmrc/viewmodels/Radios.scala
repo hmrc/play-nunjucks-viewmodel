@@ -33,24 +33,22 @@ object Radios {
 
   def apply(field: Field, items: Seq[Radio]): Seq[Item] = {
 
-    val head = items.headOption.map {
-      item =>
-        Item(
-          id      = field.id,
-          text    = item.label,
-          value   = item.value,
-          checked = field.values.contains(item.value)
-        )
+    val head = items.headOption.map { item =>
+      Item(
+        id = field.id,
+        text = item.label,
+        value = item.value,
+        checked = field.values.contains(item.value)
+      )
     }
 
-    val tail = items.zipWithIndex.tail.map {
-      case (item, i) =>
-        Item(
-          id      = s"${field.id}_$i",
-          text    = item.label,
-          value   = item.value,
-          checked = field.values.contains(item.value)
-        )
+    val tail = items.zipWithIndex.tail.map { case (item, i) =>
+      Item(
+        id = s"${field.id}_$i",
+        text = item.label,
+        value = item.value,
+        checked = field.values.contains(item.value)
+      )
     }
 
     head.toSeq ++ tail

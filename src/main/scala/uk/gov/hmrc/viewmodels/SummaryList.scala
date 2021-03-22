@@ -28,8 +28,8 @@ object SummaryList {
 
     implicit def writes(implicit messages: Messages): OWrites[Key] = (
       (__ \ "text").writeNullable[Text] and
-      (__ \ "html").writeNullable[Html] and
-      (__ \ "classes").writeNullable[String]
+        (__ \ "html").writeNullable[Html] and
+        (__ \ "classes").writeNullable[String]
     )(key => (key.text, key.html, classes(key.classes)))
   }
 
@@ -39,29 +39,29 @@ object SummaryList {
 
     implicit def writes(implicit messages: Messages): OWrites[Value] = (
       (__ \ "text").writeNullable[Text] and
-      (__ \ "html").writeNullable[Html] and
-      (__ \ "classes").writeNullable[String]
+        (__ \ "html").writeNullable[Html] and
+        (__ \ "classes").writeNullable[String]
     )(value => (value.text, value.html, classes(value.classes)))
   }
 
   final case class Action(
-                           content: Content,
-                           href: String,
-                           visuallyHiddenText: Option[Text] = None,
-                           classes: Seq[String] = Seq.empty,
-                           attributes: Map[String, String] = Map.empty
-                         ) extends WithContent
+    content: Content,
+    href: String,
+    visuallyHiddenText: Option[Text] = None,
+    classes: Seq[String] = Seq.empty,
+    attributes: Map[String, String] = Map.empty
+  ) extends WithContent
 
   object Action {
 
     implicit def writes(implicit messages: Messages): OWrites[Action] = (
       (__ \ "href").write[String] and
-      (__ \ "text").writeNullable[Text] and
-      (__ \ "html").writeNullable[Html] and
-      (__ \ "visuallyHiddenText").writeNullable[Text] and
-      (__ \ "classes").writeNullable[String] and
-      (__ \ "attributes").writeNullable[Map[String, String]]
-    ){ action =>
+        (__ \ "text").writeNullable[Text] and
+        (__ \ "html").writeNullable[Html] and
+        (__ \ "visuallyHiddenText").writeNullable[Text] and
+        (__ \ "classes").writeNullable[String] and
+        (__ \ "attributes").writeNullable[Map[String, String]]
+    ) { action =>
       val attributes = Some(action.attributes).filter(_.nonEmpty)
       (action.href, action.text, action.html, action.visuallyHiddenText, classes(action.classes), attributes)
     }
@@ -73,9 +73,9 @@ object SummaryList {
 
     implicit def writes(implicit messages: Messages): OWrites[Row] = (
       (__ \ "key").write[Key] and
-      (__ \ "value").write[Value] and
-      (__ \ "actions" \ "items").writeNullable[Seq[Action]]
-    ){ row =>
+        (__ \ "value").write[Value] and
+        (__ \ "actions" \ "items").writeNullable[Seq[Action]]
+    ) { row =>
       val actions = Some(row.actions).filter(_.nonEmpty)
       (row.key, row.value, actions)
     }

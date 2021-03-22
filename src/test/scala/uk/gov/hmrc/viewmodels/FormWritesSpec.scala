@@ -41,8 +41,8 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
         )
 
         val expectedJson = Json.obj(
-          "foo" -> Json.obj(
-            "value" -> JsNull,
+          "foo"    -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           ),
           "errors" -> JsArray.empty
@@ -60,8 +60,8 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
         ).fill("foobar")
 
         val expectedJson = Json.obj(
-          "foo" -> Json.obj(
-            "value" -> "foobar",
+          "foo"    -> Json.obj(
+            "value"  -> "foobar",
             "values" -> Json.arr("foobar")
           ),
           "errors" -> JsArray.empty
@@ -79,8 +79,8 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
         ).fill(List("bar", "baz"))
 
         val expectedJson = Json.obj(
-          "foo" -> Json.obj(
-            "value" -> JsNull,
+          "foo"    -> Json.obj(
+            "value"  -> JsNull,
             "values" -> Json.arr("bar", "baz")
           ),
           "errors" -> JsArray.empty
@@ -93,15 +93,15 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
       "with errors" in {
 
-        val form = Form(
+        val form         = Form(
           "foo" -> Forms.nonEmptyText
         ).bind(Map("foo" -> ""))
 
         val expectedJson = Json.obj(
-          "foo" -> Json.obj(
-            "value" -> "",
+          "foo"    -> Json.obj(
+            "value"  -> "",
             "values" -> Json.arr(""),
-            "error" -> Json.obj(
+            "error"  -> Json.obj(
               "text" -> "error.required"
             )
           ),
@@ -120,28 +120,30 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
       "with errors with arguments in their message" in {
 
-        val messagesApi: MessagesApi = Helpers.stubMessagesApi(Map(
-          "en" -> Map(
-            "foo.invalid" -> "first arg: {0}, second arg: {1}"
+        val messagesApi: MessagesApi = Helpers.stubMessagesApi(
+          Map(
+            "en" -> Map(
+              "foo.invalid" -> "first arg: {0}, second arg: {1}"
+            )
           )
-        ))
+        )
 
         implicit val messages: Messages = Helpers.stubMessages(messagesApi)
 
-        val constraint: Constraint[String] = Constraint {
-          _ => Invalid("foo.invalid", "bar", 13)
+        val constraint: Constraint[String] = Constraint { _ =>
+          Invalid("foo.invalid", "bar", 13)
         }
 
-        val form = Form(
+        val form         = Form(
           "foo" -> Forms.text
-              .verifying(constraint)
+            .verifying(constraint)
         ).bind(Map("foo" -> "baz"))
 
         val expectedJson = Json.obj(
-          "foo" -> Json.obj(
-            "value" -> "baz",
+          "foo"    -> Json.obj(
+            "value"  -> "baz",
             "values" -> Json.arr("baz"),
-            "error" -> Json.obj(
+            "error"  -> Json.obj(
               "text" -> "first arg: bar, second arg: 13"
             )
           ),
@@ -169,19 +171,19 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       )
 
       val expectedJson = Json.obj(
-        "date" -> Json.obj(
-          "value" -> JsNull,
+        "date"   -> Json.obj(
+          "value"  -> JsNull,
           "values" -> JsArray.empty,
-          "day" -> Json.obj(
-            "value" -> JsNull,
+          "day"    -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           ),
-          "month" -> Json.obj(
-            "value" -> JsNull,
+          "month"  -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           ),
-          "year" -> Json.obj(
-            "value" -> JsNull,
+          "year"   -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           )
         ),
@@ -200,19 +202,19 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       ).fill(LocalDate.of(2001, 2, 1))
 
       val expectedJson = Json.obj(
-        "date" -> Json.obj(
-          "value" -> JsNull,
+        "date"   -> Json.obj(
+          "value"  -> JsNull,
           "values" -> JsArray.empty,
-          "day" -> Json.obj(
-            "value" -> "1",
+          "day"    -> Json.obj(
+            "value"  -> "1",
             "values" -> Json.arr("1")
           ),
-          "month" -> Json.obj(
-            "value" -> "2",
+          "month"  -> Json.obj(
+            "value"  -> "2",
             "values" -> Json.arr("2")
           ),
-          "year" -> Json.obj(
-            "value" -> "2001",
+          "year"   -> Json.obj(
+            "value"  -> "2001",
             "values" -> Json.arr("2001")
           )
         ),
@@ -231,22 +233,22 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
       ).bind(Map.empty[String, String])
 
       val expectedJson = Json.obj(
-        "date" -> Json.obj(
-          "value" -> JsNull,
+        "date"   -> Json.obj(
+          "value"  -> JsNull,
           "values" -> JsArray.empty,
-          "error" -> Json.obj(
+          "error"  -> Json.obj(
             "text" -> "date.required"
           ),
-          "day" -> Json.obj(
-            "value" -> JsNull,
+          "day"    -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           ),
-          "month" -> Json.obj(
-            "value" -> JsNull,
+          "month"  -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           ),
-          "year" -> Json.obj(
-            "value" -> JsNull,
+          "year"   -> Json.obj(
+            "value"  -> JsNull,
             "values" -> JsArray.empty
           )
         ),
@@ -265,30 +267,30 @@ class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
 
     "with errors on a nested field" in {
 
-      val form = Form(
+      val form         = Form(
         "password" -> Forms.mapping(
-          "first" -> Forms.nonEmptyText,
+          "first"  -> Forms.nonEmptyText,
           "second" -> Forms.nonEmptyText
         )(Tuple2.apply)(Tuple2.unapply)
       ).bind(Map("password.first" -> "foobar"))
 
       val expectedJson = Json.obj(
         "password" -> Json.obj(
-          "value" -> JsNull,
+          "value"  -> JsNull,
           "values" -> JsArray.empty,
-          "first" -> Json.obj(
-            "value" -> "foobar",
+          "first"  -> Json.obj(
+            "value"  -> "foobar",
             "values" -> Json.arr("foobar")
           ),
           "second" -> Json.obj(
-            "value" -> JsNull,
+            "value"  -> JsNull,
             "values" -> JsArray.empty,
-            "error" -> Json.obj(
+            "error"  -> Json.obj(
               "text" -> "error.required"
             )
           )
         ),
-        "errors" -> Json.arr(
+        "errors"   -> Json.arr(
           Json.obj(
             "text" -> "error.required",
             "href" -> "#password_second"
