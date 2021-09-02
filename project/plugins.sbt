@@ -12,7 +12,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-uglify" % "2.0.0")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.11")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.0.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.5.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-play-cross-compilation" % "2.0.0")
 

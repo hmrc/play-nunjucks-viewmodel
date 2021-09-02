@@ -51,6 +51,11 @@ object Text {
 
   implicit def writes(implicit messages: Messages): Writes[Text] =
     Writes.of[String].contramap[Text](_.resolve)
+
+  // This is needed from Play 2.8 onwards, as there is an undocumented change of the play.api.libs.json.Writes method
+  // from contravariant Writes[-A] to invariant Writes[A] https://github.com/playframework/playframework/issues/10416
+  implicit def messageWrites(implicit messages: Messages): Writes[Message] =
+    Writes.of[String].contramap[Text.Message](_.resolve)
 }
 
 final case class Html(value: play.twirl.api.Html) extends Content
