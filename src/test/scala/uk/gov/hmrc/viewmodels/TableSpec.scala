@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,16 @@
 
 package uk.gov.hmrc.viewmodels
 
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, Json}
+import play.api.test.Helpers
 import uk.gov.hmrc.viewmodels.Table.Cell
 import uk.gov.hmrc.viewmodels.Text.Literal
-import play.api.test.Helpers
 
-class TableSpec extends FreeSpec with MustMatchers with OptionValues {
+class TableSpec extends AnyFreeSpec with Matchers with OptionValues {
 
   implicit val messages: Messages = Helpers.stubMessages()
 

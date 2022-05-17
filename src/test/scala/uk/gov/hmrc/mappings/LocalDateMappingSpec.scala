@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.mappings
 
+import org.scalatest.OptionValues
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.data.{Form, FormError}
+import uk.gov.hmrc.viewmodels._
+
 import java.time.LocalDate
 
-import uk.gov.hmrc.viewmodels._
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import play.api.data.{Form, FormError}
-
-class LocalDateMappingSpec extends FreeSpec with MustMatchers with OptionValues {
+class LocalDateMappingSpec extends AnyFreeSpec with Matchers with OptionValues {
 
   val form = Form(
     "date" -> new LocalDateMapping()
