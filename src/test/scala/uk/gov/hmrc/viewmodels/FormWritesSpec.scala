@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.viewmodels
 
-import java.time.LocalDate
-
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.data.validation.{Constraint, Invalid}
 import play.api.data.{Form, Forms}
 import play.api.i18n.{Messages, MessagesApi}
@@ -26,7 +26,9 @@ import play.api.libs.json.{JsArray, JsNull, Json}
 import play.api.test.Helpers
 import uk.gov.hmrc.mappings.LocalDateMapping
 
-class FormWritesSpec extends FreeSpec with MustMatchers with OptionValues {
+import java.time.LocalDate
+
+class FormWritesSpec extends AnyFreeSpec with Matchers with OptionValues {
 
   implicit val messages: Messages = Helpers.stubMessages()
 
