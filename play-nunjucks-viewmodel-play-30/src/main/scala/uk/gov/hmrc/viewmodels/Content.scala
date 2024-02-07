@@ -18,7 +18,6 @@ package uk.gov.hmrc.viewmodels
 
 import play.api.i18n.Messages
 import play.api.libs.json.Writes
-import play.api.libs.functional.syntax._
 
 sealed trait Content
 

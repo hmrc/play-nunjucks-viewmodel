@@ -19,7 +19,6 @@ package uk.gov.hmrc.viewmodels
 import play.api.data.Field
 import play.api.i18n.Messages
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 
 object Radios {
 
@@ -54,7 +53,7 @@ object Radios {
     head.toSeq ++ tail
   }
 
-  def yesNo(field: Field)(implicit messages: Messages): Seq[Item] = Seq(
+  def yesNo(field: Field): Seq[Item] = Seq(
     Item(id = field.id, text = msg"site.yes", value = "true", checked = field.value.contains("true")),
     Item(id = s"${field.id}-no", text = msg"site.no", value = "false", checked = field.value.contains("false"))
   )

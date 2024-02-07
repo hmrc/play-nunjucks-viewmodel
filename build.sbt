@@ -1,10 +1,9 @@
-import sbt.Path.relativeTo
-
 ThisBuild / majorVersion := 1
 ThisBuild / isPublicArtefact := true
+ThisBuild / organization := "uk.gov.hmrc"
 
-val scala2_12               = "2.12.18"
-val scala2_13               = "2.13.12"
+val scala2_12 = "2.12.18"
+val scala2_13 = "2.13.12"
 
 def copySources(module: Project) = Seq(
   Compile / scalaSource := (module / Compile / scalaSource).value,
@@ -12,6 +11,12 @@ def copySources(module: Project) = Seq(
   Test / scalaSource := (module / Test / scalaSource).value,
   Test / resourceDirectory := (module / Test / resourceDirectory).value
 )
+
+def scalacOptionsVersion(scalaVersion: String) =
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, 12)) => Seq("-Ypartial-unification")
+    case _             => Nil
+  }
 
 lazy val library = (project in file("."))
   .settings(publish / skip := true)
@@ -31,7 +36,6 @@ lazy val playNunjucksPlay30 = Project("play-nunjucks-viewmodel-play-30", file("p
     libraryDependencies ++= LibDependencies.play30,
     buildInfoKeys ++= Seq[BuildInfoKey]("playVersion" -> LibDependencies.play30Version)
   )
-  .settings(Compile / resourceGenerators += npmModulesTarballTask.taskValue)
 
 lazy val playNunjucksPlay29 = Project("play-nunjucks-viewmodel-play-29", file("play-nunjucks-viewmodel-play-29"))
   .enablePlugins(SbtWeb)
@@ -41,38 +45,19 @@ lazy val playNunjucksPlay29 = Project("play-nunjucks-viewmodel-play-29", file("p
   .settings(
     libraryDependencies ++= LibDependencies.play29
   )
-  .settings(
-    Compile / resourceGenerators += npmModulesTarballTask.taskValue
-      .dependsOn(copyNpmFilesTask.taskValue)
-  )
 
 lazy val playNunjucksPlay28 = Project("play-nunjucks-viewmodel-play-28", file("play-nunjucks-viewmodel-play-28"))
   .enablePlugins(SbtWeb)
   .settings(copySources(playNunjucksPlay30))
   .settings(inConfig(Test)(testSettings): _*)
-  .settings(scalaVersion := scala2_12, crossScalaVersions := Seq(scala2_12, scala2_13))
+  .settings(
+    scalaVersion := scala2_12,
+    crossScalaVersions := Seq(scala2_12, scala2_13),
+    scalacOptions := scalacOptionsVersion(scalaVersion.value)
+  )
   .settings(
     libraryDependencies ++= LibDependencies.play28
   )
-  .settings(
-    Compile / resourceGenerators += npmModulesTarballTask.taskValue
-      .dependsOn(copyNpmFilesTask.taskValue)
-  )
-
-def copyNpmFilesTask = Def.task {
-  IO.copy(
-    Seq("package.json", "package-lock.json")
-      .map(file => baseDirectory.value / ".." / "play-nunjucks-viewmodel-play-30" / file -> baseDirectory.value / file)
-  )
-}
-
-def npmModulesTarballTask = Def.task {
-  val nodeModules = (Assets / JsEngineKeys.npmNodeModules).value
-  val filesToZip  = nodeModules pair relativeTo(baseDirectory.value)
-  val zipFile     = (Compile / resourceManaged).value / "nodeModules.tar"
-  IO.zip(filesToZip, zipFile, None)
-  Seq(zipFile)
-}
 
 lazy val itServer = sys.env.get("PLAY_VERSION") match {
   case Some("2.8") => itServerPlay28
