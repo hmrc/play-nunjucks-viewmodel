@@ -3,7 +3,17 @@ resolvers += Resolver.url("HMRC-open-artefacts-ivy2", url("https://open.artefact
   Resolver.ivyStylePatterns
 )
 
-(managedSources in Compile) += (baseDirectory.value / "project" / "PlayCrossCompilation.scala")
+sys.env.get("PLAY_VERSION") match {
+  case Some("2.8") => // required since we're cross building for Play 2.8 which isn't compatible with sbt 1.9
+    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+  case _           => libraryDependencySchemes := libraryDependencySchemes.value // or any empty DslEntry
+}
+
+sys.env.get("PLAY_VERSION") match {
+  case Some("2.8") => addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.20")
+  case Some("2.9") => addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.9.0")
+  case _           => addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.0")
+}
 
 addSbtPlugin("net.ground5hark.sbt" % "sbt-concat" % "0.2.0")
 
@@ -11,10 +21,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-uglify" % "2.0.0")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.11")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.8.0")
-
-addSbtPlugin("uk.gov.hmrc" % "sbt-play-cross-compilation" % "2.3.0")
-
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % PlayCrossCompilation.version)
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.20.0")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0")
