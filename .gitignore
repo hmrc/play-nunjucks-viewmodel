@@ -23,4 +23,8 @@ yarn-debug.log
 yarn-error.log
 .DS_Store
 .bsp/
+play-nunjucks-viewmodel-play-28/package.json
+play-nunjucks-viewmodel-play-28/package-lock.json
+play-nunjucks-viewmodel-play-29/package.json
+play-nunjucks-viewmodel-play-29/package-lock.json
 

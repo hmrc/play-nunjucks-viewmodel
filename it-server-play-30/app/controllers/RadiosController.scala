@@ -19,7 +19,7 @@ package controllers
 import com.google.inject.Inject
 import play.api.data.{Form, FormError, Forms}
 import play.api.data.format.Formatter
-import play.api.i18n.{I18nSupport, Messages}
+import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
@@ -30,7 +30,6 @@ sealed trait RadioAnswer
 object RadioAnswer {
 
   import play.api.libs.json._
-  import play.api.libs.functional.syntax._
 
   case object A extends RadioAnswer
   case object B extends RadioAnswer
@@ -74,7 +73,7 @@ class RadiosController @Inject()(
 
   import uk.gov.hmrc.viewmodels._
 
-  private def radios(form: Form[_])(implicit messages: Messages): Seq[Radios.Item] = {
+  private def radios(form: Form[_]): Seq[Radios.Item] = {
 
     val field = form("value")
     val items = Seq(
@@ -112,7 +111,7 @@ class RadiosController @Inject()(
           )).map(BadRequest(_)),
         value =>
           Future.successful {
-            Redirect(controllers.routes.RadiosController.get())
+            Redirect(controllers.routes.RadiosController.get)
               .addingToSession("radios" -> Json.stringify(Json.toJson(value)))
           }
       )

@@ -42,7 +42,7 @@ class SummaryListController @Inject()(
             actions = List(
               SummaryList.Action(
                 msg"site.edit",
-                routes.RadiosController.get().url,
+                routes.RadiosController.get.url,
                 visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"radios.title"))
               )
             )
@@ -53,7 +53,7 @@ class SummaryListController @Inject()(
             actions = List(
               SummaryList.Action(
                 msg"site.edit",
-                routes.YesNoController.get().url,
+                routes.YesNoController.get.url,
                 visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"yesNo.title"))
               )
             )

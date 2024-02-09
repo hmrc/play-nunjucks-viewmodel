@@ -69,7 +69,7 @@ class DateController @Inject()(
         },
         value =>
           Future.successful {
-            Redirect(controllers.routes.DateController.get())
+            Redirect(controllers.routes.DateController.get)
               .addingToSession("date" -> Json.stringify(Json.toJson(value)))
           }
       )

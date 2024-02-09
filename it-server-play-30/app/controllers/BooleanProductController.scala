@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import play.api.data.{Form, Forms}
-import play.api.i18n.{I18nSupport, Messages}
+import play.api.i18n.I18nSupport
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
@@ -51,7 +51,7 @@ class BooleanProductController @Inject()(
       .verifying("error.required", answer => answer.a || answer.b || answer.c)
   )
 
-  private def checkboxes(form: Form[_])(implicit messages: Messages): Seq[Item] = {
+  private def checkboxes(form: Form[_]): Seq[Item] = {
 
     val field = form("value")
     val items = Seq(
@@ -86,7 +86,7 @@ class BooleanProductController @Inject()(
           )).map(BadRequest(_)),
         value =>
           Future.successful {
-            Redirect(controllers.routes.BooleanProductController.get())
+            Redirect(controllers.routes.BooleanProductController.get)
               .addingToSession("booleanProduct" -> Json.stringify(Json.toJson(value)))
           }
       )

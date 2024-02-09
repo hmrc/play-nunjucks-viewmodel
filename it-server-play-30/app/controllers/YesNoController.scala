@@ -74,7 +74,7 @@ class YesNoController @Inject()(
           )).map(BadRequest(_)),
         value =>
           Future.successful {
-            Redirect(controllers.routes.YesNoController.get())
+            Redirect(controllers.routes.YesNoController.get)
               .addingToSession("yesNo" -> Json.stringify(Json.toJson(value)))
           }
       )

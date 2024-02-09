@@ -19,7 +19,7 @@ package controllers
 import com.google.inject.Inject
 import play.api.data._
 import play.api.data.format.Formatter
-import play.api.i18n.{I18nSupport, Messages}
+import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
@@ -34,7 +34,6 @@ case object C extends CheckboxAnswer
 
 object CheckboxAnswer {
 
-  import play.api.libs.functional.syntax._
   import play.api.libs.json._
 
   implicit val writes: Writes[CheckboxAnswer] =
@@ -69,7 +68,7 @@ class CheckboxesController @Inject()(
                                       cc: ControllerComponents
                                     )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
 
-  private def checkboxes(form: Form[_])(implicit messages: Messages): Seq[Checkboxes.Item] = {
+  private def checkboxes(form: Form[_]): Seq[Checkboxes.Item] = {
 
     val field = form("value")
     val items = Seq(
@@ -109,7 +108,7 @@ class CheckboxesController @Inject()(
           )).map(BadRequest(_)),
         value =>
           Future.successful {
-            Redirect(controllers.routes.CheckboxesController.get())
+            Redirect(controllers.routes.CheckboxesController.get)
               .addingToSession("checkboxes" -> Json.stringify(Json.toJson(value)))
           }
       )
