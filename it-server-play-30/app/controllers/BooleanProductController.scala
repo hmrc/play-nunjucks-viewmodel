@@ -28,26 +28,29 @@ import uk.gov.hmrc.viewmodels._
 import scala.concurrent.{ExecutionContext, Future}
 
 final case class BooleanProductAnswer(
-                                       a: Boolean,
-                                       b: Boolean,
-                                       c: Boolean
-                                     )
+  a: Boolean,
+  b: Boolean,
+  c: Boolean
+)
 
 object BooleanProductAnswer {
   implicit lazy val format: OFormat[BooleanProductAnswer] = Json.format
 }
 
-class BooleanProductController @Inject()(
-                                      renderer: NunjucksRenderer,
-                                      cc: ControllerComponents
-                                    )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+class BooleanProductController @Inject() (
+  renderer: NunjucksRenderer,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends AbstractController(cc)
+    with I18nSupport {
 
   private val emptyForm: Form[BooleanProductAnswer] = Form(
-    "value" -> Forms.mapping(
-      "a" -> Forms.boolean,
-      "b" -> Forms.boolean,
-      "c" -> Forms.boolean
-    )(BooleanProductAnswer.apply)(BooleanProductAnswer.unapply)
+    "value" -> Forms
+      .mapping(
+        "a" -> Forms.boolean,
+        "b" -> Forms.boolean,
+        "c" -> Forms.boolean
+      )(BooleanProductAnswer.apply)(BooleanProductAnswer.unapply)
       .verifying("error.required", answer => answer.a || answer.b || answer.c)
   )
 
@@ -63,27 +66,35 @@ class BooleanProductController @Inject()(
     Checkboxes.booleanProduct(field, items)
   }
 
-  def get: Action[AnyContent] = Action.async {
-    implicit request =>
+  def get: Action[AnyContent] = Action.async { implicit request =>
+    val existingValue = getFromSession[BooleanProductAnswer]("booleanProduct")
+    val form          = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
 
-      val existingValue = getFromSession[BooleanProductAnswer]("booleanProduct")
-      val form = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
-
-      renderer.render("booleanProduct.njk", Json.obj(
-        "form"       -> form,
-        "checkboxes" -> checkboxes(form)
-      )).map(Ok(_))
+    renderer
+      .render(
+        "booleanProduct.njk",
+        Json.obj(
+          "form"       -> form,
+          "checkboxes" -> checkboxes(form)
+        )
+      )
+      .map(Ok(_))
   }
 
-  def post: Action[AnyContent] = Action.async {
-    implicit request =>
-
-      emptyForm.bindFromRequest().fold(
+  def post: Action[AnyContent] = Action.async { implicit request =>
+    emptyForm
+      .bindFromRequest()
+      .fold(
         errors =>
-          renderer.render("booleanProduct.njk", Json.obj(
-            "form"       -> errors,
-            "checkboxes" -> checkboxes(errors)
-          )).map(BadRequest(_)),
+          renderer
+            .render(
+              "booleanProduct.njk",
+              Json.obj(
+                "form"       -> errors,
+                "checkboxes" -> checkboxes(errors)
+              )
+            )
+            .map(BadRequest(_)),
         value =>
           Future.successful {
             Redirect(controllers.routes.BooleanProductController.get)

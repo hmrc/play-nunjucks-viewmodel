@@ -28,10 +28,12 @@ import uk.gov.hmrc.nunjucks.NunjucksRenderer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DateController @Inject()(
-                                renderer: NunjucksRenderer,
-                                cc: ControllerComponents
-                              )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+class DateController @Inject() (
+  renderer: NunjucksRenderer,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends AbstractController(cc)
+    with I18nSupport {
 
   import uk.gov.hmrc.viewmodels._
 
@@ -39,33 +41,40 @@ class DateController @Inject()(
     "date" -> new LocalDateMapping()
   )
 
-  def get: Action[AnyContent] = Action.async {
-    implicit request =>
+  def get: Action[AnyContent] = Action.async { implicit request =>
+    val existingValue = getFromSession[LocalDate]("date")
+    val form          = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
 
-      val existingValue = getFromSession[LocalDate]("date")
-      val form = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
+    val viewModel = DateInput.localDate(form("date"))
 
-      val viewModel = DateInput.localDate(form("date"))
-
-      renderer.render("date.njk", Json.obj(
-        "form" -> form,
-        "date" -> viewModel
-      )).map(Ok(_))
+    renderer
+      .render(
+        "date.njk",
+        Json.obj(
+          "form" -> form,
+          "date" -> viewModel
+        )
+      )
+      .map(Ok(_))
   }
 
-  def post: Action[AnyContent] = Action.async {
-    implicit request =>
-
-
-      emptyForm.bindFromRequest().fold(
+  def post: Action[AnyContent] = Action.async { implicit request =>
+    emptyForm
+      .bindFromRequest()
+      .fold(
         errors => {
 
           val viewModel = DateInput.localDate(errors("date"))
 
-          renderer.render("date.njk", Json.obj(
-            "form" -> errors,
-            "date" -> viewModel
-          )).map(BadRequest(_))
+          renderer
+            .render(
+              "date.njk",
+              Json.obj(
+                "form" -> errors,
+                "date" -> viewModel
+              )
+            )
+            .map(BadRequest(_))
         },
         value =>
           Future.successful {

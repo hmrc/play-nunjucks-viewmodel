@@ -66,10 +66,12 @@ object RadioAnswer {
   }
 }
 
-class RadiosController @Inject()(
-                                  renderer: NunjucksRenderer,
-                                  cc: ControllerComponents
-                                )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+class RadiosController @Inject() (
+  renderer: NunjucksRenderer,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends AbstractController(cc)
+    with I18nSupport {
 
   import uk.gov.hmrc.viewmodels._
 
@@ -88,27 +90,35 @@ class RadiosController @Inject()(
   private val emptyForm: Form[RadioAnswer] =
     Form("value" -> Forms.of[RadioAnswer])
 
-  def get: Action[AnyContent] = Action.async {
-    implicit request =>
+  def get: Action[AnyContent]              = Action.async { implicit request =>
+    val existingValue = getFromSession[RadioAnswer]("radios")
+    val form          = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
 
-      val existingValue = getFromSession[RadioAnswer]("radios")
-      val form = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
-
-      renderer.render("radios.njk", Json.obj(
-        "form"   -> form,
-        "radios" -> radios(form)
-      )).map(Ok(_))
+    renderer
+      .render(
+        "radios.njk",
+        Json.obj(
+          "form"   -> form,
+          "radios" -> radios(form)
+        )
+      )
+      .map(Ok(_))
   }
 
-  def post: Action[AnyContent] = Action.async {
-    implicit request =>
-
-      emptyForm.bindFromRequest().fold(
+  def post: Action[AnyContent] = Action.async { implicit request =>
+    emptyForm
+      .bindFromRequest()
+      .fold(
         errors =>
-          renderer.render("radios.njk", Json.obj(
-            "form"   -> errors,
-            "radios" -> radios(errors)
-          )).map(BadRequest(_)),
+          renderer
+            .render(
+              "radios.njk",
+              Json.obj(
+                "form"   -> errors,
+                "radios" -> radios(errors)
+              )
+            )
+            .map(BadRequest(_)),
         value =>
           Future.successful {
             Redirect(controllers.routes.RadiosController.get)

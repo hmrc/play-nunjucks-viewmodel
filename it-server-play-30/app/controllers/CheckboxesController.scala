@@ -39,14 +39,13 @@ object CheckboxAnswer {
   implicit val writes: Writes[CheckboxAnswer] =
     Writes.of[String].contramap(_.toString)
 
-  implicit val reads: Reads[CheckboxAnswer] = {
+  implicit val reads: Reads[CheckboxAnswer] =
     Reads.of[String].flatMap {
       case "A" => Reads.pure(A)
       case "B" => Reads.pure(B)
       case "C" => Reads.pure(C)
       case _   => Reads(_ => JsError("error.invalid"))
     }
-  }
 
   implicit val binding: Formatter[CheckboxAnswer] = new Formatter[CheckboxAnswer] {
 
@@ -63,10 +62,12 @@ object CheckboxAnswer {
   }
 }
 
-class CheckboxesController @Inject()(
-                                      renderer: NunjucksRenderer,
-                                      cc: ControllerComponents
-                                    )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+class CheckboxesController @Inject() (
+  renderer: NunjucksRenderer,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends AbstractController(cc)
+    with I18nSupport {
 
   private def checkboxes(form: Form[_]): Seq[Checkboxes.Item] = {
 
@@ -81,31 +82,40 @@ class CheckboxesController @Inject()(
   }
 
   private val emptyForm = Form(
-    "value" -> Forms.set(Forms.of[CheckboxAnswer])
+    "value" -> Forms
+      .set(Forms.of[CheckboxAnswer])
       .verifying("error.required", _.nonEmpty)
   )
 
-  def get: Action[AnyContent] = Action.async {
-    implicit request =>
+  def get: Action[AnyContent] = Action.async { implicit request =>
+    val existingValue = getFromSession[Set[CheckboxAnswer]]("checkboxes")
+    val form          = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
 
-      val existingValue = getFromSession[Set[CheckboxAnswer]]("checkboxes")
-      val form = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
-
-      renderer.render("checkboxes.njk", Json.obj(
-        "form"       -> form,
-        "checkboxes" -> checkboxes(form)
-      )).map(Ok(_))
+    renderer
+      .render(
+        "checkboxes.njk",
+        Json.obj(
+          "form"       -> form,
+          "checkboxes" -> checkboxes(form)
+        )
+      )
+      .map(Ok(_))
   }
 
-  def post: Action[AnyContent] = Action.async {
-    implicit request =>
-
-      emptyForm.bindFromRequest().fold(
+  def post: Action[AnyContent] = Action.async { implicit request =>
+    emptyForm
+      .bindFromRequest()
+      .fold(
         errors =>
-          renderer.render("checkboxes.njk", Json.obj(
-            "form"       -> errors,
-            "checkboxes" -> checkboxes(errors)
-          )).map(BadRequest(_)),
+          renderer
+            .render(
+              "checkboxes.njk",
+              Json.obj(
+                "form"       -> errors,
+                "checkboxes" -> checkboxes(errors)
+              )
+            )
+            .map(BadRequest(_)),
         value =>
           Future.successful {
             Redirect(controllers.routes.CheckboxesController.get)

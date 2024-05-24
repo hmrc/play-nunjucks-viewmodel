@@ -26,10 +26,12 @@ import uk.gov.hmrc.nunjucks.NunjucksRenderer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class YesNoController @Inject()(
-                                 renderer: NunjucksRenderer,
-                                 cc: ControllerComponents
-                               )(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+class YesNoController @Inject() (
+  renderer: NunjucksRenderer,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends AbstractController(cc)
+    with I18nSupport {
 
   import uk.gov.hmrc.viewmodels._
 
@@ -51,27 +53,35 @@ class YesNoController @Inject()(
   private val emptyForm: Form[Boolean] =
     Form("value" -> Forms.of[Boolean])
 
-  def get: Action[AnyContent] = Action.async {
-    implicit request =>
+  def get: Action[AnyContent]          = Action.async { implicit request =>
+    val existingValue = getFromSession[Boolean]("yesNo")
+    val form          = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
 
-      val existingValue = getFromSession[Boolean]("yesNo")
-      val form = existingValue.map(emptyForm.fill).getOrElse(emptyForm)
-
-      renderer.render("yesNo.njk", Json.obj(
-        "form"   -> form,
-        "radios" -> Radios.yesNo(form("value"))
-      )).map(Ok(_))
+    renderer
+      .render(
+        "yesNo.njk",
+        Json.obj(
+          "form"   -> form,
+          "radios" -> Radios.yesNo(form("value"))
+        )
+      )
+      .map(Ok(_))
   }
 
-  def post: Action[AnyContent] = Action.async {
-    implicit request =>
-
-      emptyForm.bindFromRequest().fold(
+  def post: Action[AnyContent] = Action.async { implicit request =>
+    emptyForm
+      .bindFromRequest()
+      .fold(
         errors =>
-          renderer.render("yesNo.njk", Json.obj(
-            "form"   -> errors,
-            "radios" -> Radios.yesNo(errors("value"))
-          )).map(BadRequest(_)),
+          renderer
+            .render(
+              "yesNo.njk",
+              Json.obj(
+                "form"   -> errors,
+                "radios" -> Radios.yesNo(errors("value"))
+              )
+            )
+            .map(BadRequest(_)),
         value =>
           Future.successful {
             Redirect(controllers.routes.YesNoController.get)
