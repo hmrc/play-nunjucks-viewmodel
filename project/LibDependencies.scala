@@ -17,6 +17,7 @@ object LibDependencies {
   val play30 = Seq(
     "org.playframework"      %% "play"                   % play30Version,
     "org.playframework"      %% "play-filters-helpers"   % play30Version,
+    "org.apache.commons"      % "commons-compress"       % "1.26.2",
     "uk.gov.hmrc"            %% s"play-nunjucks-play-30" % s"1.0.0",
     "org.playframework"      %% "play-test"              % play30Version % Test,
     "org.scalactic"          %% "scalactic"              % "3.2.3"       % Test,

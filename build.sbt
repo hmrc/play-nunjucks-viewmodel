@@ -10,6 +10,7 @@ lazy val playNunjucksPlay30 = Project("play-nunjucks-viewmodel-play-30", file("p
   .settings(scalaVersion := scala2_13)
   .settings(
     libraryDependencies ++= LibDependencies.play30,
+    dependencyOverrides += "org.apache.commons" % "commons-compress" % "1.26.2",
     buildInfoKeys ++= Seq[BuildInfoKey]("playVersion" -> LibDependencies.play30Version)
   )
 
