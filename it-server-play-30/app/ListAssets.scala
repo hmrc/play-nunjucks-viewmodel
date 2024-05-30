@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-import better.files.File
-import org.webjars.WebJarAssetLocator
+import better.files._
+import org.webjars.{WebJarAssetLocator, WebJarExtractor}
+import play.Environment
 
 // can run in intellij or via cli with `sbt "project it-server-play-30" "runMain ListAssets"`
 
 object ListAssets extends App {
-  val output = File("webjar-locator-core-0.35.txt")
-  new WebJarAssetLocator().listAssets("govuk-frontend").forEach(output.appendLine)
+  val outputFolder = File("webjar-locator-core-0-58").createDirectoryIfNotExists().clear()
+  val listOfAssets = outputFolder / "assets.txt"
+  new WebJarAssetLocator().listAssets("govuk-frontend").forEach(listOfAssets.appendLine)
+  new WebJarExtractor(classOf[Environment].getClassLoader)
+    .extractAllWebJarsTo((outputFolder / "assets").toJava)
 }

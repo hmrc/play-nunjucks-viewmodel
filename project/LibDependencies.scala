@@ -10,7 +10,7 @@ object LibDependencies {
     "io.apigee.trireme"     % "trireme-core"         % "0.9.4",
     "io.apigee.trireme"     % "trireme-kernel"       % "0.9.4",
     "io.apigee.trireme"     % "trireme-node12src"    % "0.9.4",
-    "org.webjars"           % "webjars-locator-core" % "0.35",
+    "org.webjars"           % "webjars-locator-core" % "0.58",
     "org.typelevel"        %% "cats-core"            % "2.2.0"
   )
 
