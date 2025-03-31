@@ -7,7 +7,7 @@ object LibDependencies {
   )
 
   val play30 = Seq(
-    "uk.gov.hmrc"            %% s"play-nunjucks-play-30" % s"1.6.0",
+    "uk.gov.hmrc"            %% s"play-nunjucks-play-30" % s"1.12.0",
     "com.vladsch.flexmark"    % "flexmark-all"           % "0.64.8" % Test,
     "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.0"  % Test
   ) ++ shared
